@@ -34,3 +34,5 @@ The dependency audit still reports four high advisories through Firebase's Node-
 The static guest demo is hosted directly in the owner's Cloudflare account using wrangler.jsonc. Run npm run build in travel-planner-fe, then deploy from the repository root with Wrangler after verifying the account. This fork does not use the team's Vercel deployment or ChatGPT Sites.
 
 Original assets and source retain their existing team provenance; no new license is asserted over collaborators' work. New maintenance is documented as such rather than attributed retroactively.
+
+Verified guest demo: https://travel-planner-demo.mpasiecki.workers.dev/demo/

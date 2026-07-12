@@ -50,7 +50,7 @@ export default function AppMuiThemeProvider(props: {
       "afterend",
       `<style id="${rootColorSchemeStyleTagId}">:root { color-scheme: ${
         prefersDarkMode ? "dark" : "light"
-      }; }</style>`
+      }; }</style>`,
     );
   }, [prefersDarkMode]);
 
@@ -95,11 +95,11 @@ export default function AppMuiThemeProvider(props: {
           },
         },
       }),
-    [prefersDarkMode]
+    [prefersDarkMode],
   );
   const wrap = useMemo(
     () => ({ backgroundImage, setBackgroundImage }),
-    [backgroundImage]
+    [backgroundImage],
   );
 
   return (
