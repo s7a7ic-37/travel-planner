@@ -19,7 +19,7 @@ Use Node.js 22. Inside travel-planner-fe:
     npm run build
     npm run dev
 
-The build exports static pages to travel-planner-fe/out. Five tests cover plan boundaries, unique stops, reordering, safe persistence and malformed day links. The original pnpm lockfile remains as historical source; npm and the current package-lock.json are used for this maintenance fork.
+The build exports static pages to travel-planner-fe/out. Six tests cover plan boundaries, unique stops, reordering, safe persistence and malformed day links. An offline SDK smoke check also constructs Firebase document and query references without network access. The original pnpm lockfile remains as historical source; npm and the current package-lock.json are used for this maintenance fork.
 
 ## Retained integrations and limits
 
@@ -27,7 +27,7 @@ The original Firebase and Mapbox flows remain in the source, optional behind env
 
 Repairs also stop fractional trip lengths and unintended form submission, encode destination links, handle failed saves/loads, check reset-password results, validate itinerary URL data and replace an obsolete auto-playing carousel with explicit controls. Next.js is upgraded from a 2023 canary to 16.4.3 and React 19, with matching types. No lint pass is claimed; the retained project has legacy lint conventions.
 
-The dependency audit still reports four high advisories through Firebase's Node-side gRPC dependency. The deployed demo is static and has no configured Firebase connection or Node server. Do not repurpose this build as a live service without reviewing those advisories, authentication and backend access rules. No security downgrade or forced vulnerable Firebase rollback was used to silence the audit.
+Firebase pins an older Node-side gRPC dependency. A scoped override selects @grpc/grpc-js 1.13.7, a patched version identified by the upstream security advisories; npm audit reports no known advisories for this dependency tree at verification. The offline SDK smoke check verifies import and reference construction, not live backend operations. The deployed demo is static and has no configured Firebase connection or Node server. Review authentication and backend access rules before using it as a live service.
 
 ## Hosting and credit
 
@@ -36,3 +36,5 @@ The static guest demo is hosted directly in the owner's Cloudflare account using
 Original assets and source retain their existing team provenance; no new license is asserted over collaborators' work. New maintenance is documented as such rather than attributed retroactively.
 
 Verified guest demo: https://travel-planner-demo.mpasiecki.workers.dev/demo/
+
+CI runs a pinned Gitleaks container against the exported public files, with network disabled, a read-only mount and fully redacted output.
