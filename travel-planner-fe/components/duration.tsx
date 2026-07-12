@@ -21,10 +21,11 @@ export default function Duration({
   setNumDays,
 }: DurationProps) {
   const [day, setDay] = useState<string>("Monday");
-  const [isDisabled, setIsDisabled] = useState<boolean>(true);
+  const isDisabled = !Number.isInteger(numDays) || numDays === null || numDays < 1 || numDays > 7;
 
-  const handleSubmit = () => {
-    handleNextPage();
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!isDisabled) handleNextPage();
   };
 
   const handleReturn = () => {
@@ -34,7 +35,6 @@ export default function Duration({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);
     setNumDays(value);
-    setIsDisabled(value < 1 || value > 7);
   };
 
   const handleSelect = (event: SelectChangeEvent<string>) => {
@@ -65,7 +65,7 @@ export default function Duration({
             <TextField
               label="How many days are you there for?"
               id="numDays"
-              value={numDays}
+              value={numDays ?? ""}
               type="number"
               inputProps={{ min: 1, max: 7 }}
               onChange={handleChange}
@@ -74,7 +74,7 @@ export default function Duration({
           <Button variant="contained" type="submit" disabled={isDisabled}>
             Continue
           </Button>
-          <Button variant="contained" onClick={handleReturn} type="submit">
+          <Button variant="contained" onClick={handleReturn} type="button">
             Return
           </Button>
         </FormControl>

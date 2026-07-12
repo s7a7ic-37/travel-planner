@@ -23,6 +23,7 @@ const HamburgerList = ({ handleCloseMenu }: HamburgerListProps) => {
       link: "/",
       icon: Home,
     },
+    { name: "Guest demo", link: "/demo/", icon: FormatListBulleted },
   ];
   if (user?.uid) {
     Buttons.push({

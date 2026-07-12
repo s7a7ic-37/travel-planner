@@ -27,8 +27,6 @@ import { getFirestore } from "firebase/firestore";
 import { writeDataToFirebase } from "@/utils/firebaseUtils";
 import { Typography } from "@mui/material";
 
-const db = getFirestore(firebase_app);
-
 interface PreferencesProps {
   handlePrevPage: () => void;
   currentPage: number;
@@ -47,6 +45,8 @@ export default function Preferences({
 }: PreferencesProps) {
   const [preferences, setPreferences] = useState<Set<string>>(new Set());
   const [redirectUrl, setRedirectUrl] = useState<string | null>(null);
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { user } = useContext(AuthContext);
   const allCategories = [
     {
@@ -92,11 +92,14 @@ export default function Preferences({
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {
-    const dayNum = numDays ? numDays : 1;
-    if (!lng || !lat || !user) return;
     e.preventDefault();
+    const dayNum = numDays ? numDays : 1;
+    if (lng === null || lat === null || !user || isSubmitting) return;
+    setIsSubmitting(true);
+    setError("");
 
     try {
+      const db = getFirestore(firebase_app);
       const [placesData, restaurantsData] = await Promise.all([
         fetchPlaces(preferences, lng, lat),
         fetchRestaurants(lng, lat),
@@ -121,7 +124,9 @@ export default function Preferences({
         `/itineraries?destination=${encodeURIComponent(destination)}`
       );
     } catch (error) {
-      console.error("Error retrieving data:", error);
+      setError("The itinerary could not be saved. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -190,13 +195,14 @@ export default function Preferences({
         })}
       </Stack>
       <Stack alignContent="space-around" direction="row">
-        <Button variant="contained" onClick={handleSubmit}>
-          Generate plan
+        <Button variant="contained" onClick={handleSubmit} disabled={isSubmitting}>
+          {isSubmitting ? "Saving plan…" : "Generate plan"}
         </Button>
         <Button variant="contained" onClick={handleReturn}>
           Return
         </Button>
       </Stack>
+      {error && <Typography role="alert">{error}</Typography>}
     </Stack>
   );
 }

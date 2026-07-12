@@ -57,8 +57,8 @@ export default function AppMuiThemeProvider(props: {
   const theme = useMemo(
     () =>
       createTheme({
-        mode: "light",
         palette: {
+          mode: "light",
           primary: {
             main: "#fff685",
           },
@@ -108,13 +108,13 @@ export default function AppMuiThemeProvider(props: {
         <Box
           id="app-container"
           sx={{
-            height: "100vh",
-            width: "100vw",
+            minHeight: "100vh",
+            width: "100%",
           }}
         >
           <Box
             sx={{
-              position: "absolute",
+              position: "fixed",
               top: 0,
               left: 0,
               width: "100%",

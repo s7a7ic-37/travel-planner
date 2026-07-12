@@ -20,8 +20,6 @@ import { redirect } from "next/navigation";
 import Divider from "@mui/material/Divider";
 import { Paper } from "@mui/material";
 
-const db = getFirestore(firebase_app);
-
 export default function Trips() {
   const [trips, setTrips] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -31,6 +29,7 @@ export default function Trips() {
     async function fetchData() {
       if (!user?.uid) return;
       try {
+        const db = getFirestore(firebase_app);
         setIsLoading(true);
         const data = await fetchDataFromFirebase(db, user.uid);
         const tripNames = Object.keys(data).sort((a, b) => {
@@ -60,6 +59,7 @@ export default function Trips() {
     );
     if (!confirmDelete) return;
 
+    const db = getFirestore(firebase_app);
     await deleteDataFromFirebase(db, user?.uid, destination);
     setTrips((prevTrips) => prevTrips.filter((trip) => trip !== destination));
   };
@@ -91,7 +91,7 @@ export default function Trips() {
               <ButtonGroup key={i}>
                 <Button
                   variant="contained"
-                  href={`/itineraries?destination=${trip}`}
+                  href={`/itineraries?destination=${encodeURIComponent(trip)}`}
                   component={Link}
                   size="large"
                   sx={{

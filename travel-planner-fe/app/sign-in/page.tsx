@@ -4,6 +4,7 @@ import signIn from "../firebase/auth/signIn";
 import { AuthContext } from "../context/AuthContext";
 import resetPassword from "../firebase/auth/resetPassword";
 import { getErrorMessage } from "../firebase/authErrors";
+import firebase_app from "../firebase/config";
 import { redirect } from "next/navigation";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
@@ -51,8 +52,8 @@ export default function SignIn() {
     const data = new FormData(event.currentTarget as HTMLFormElement);
     const formEmail = data.get("email") as string;
     try {
-      await resetPassword(formEmail);
-      setStatus("Password reset email sent");
+      const { error } = await resetPassword(formEmail);
+      setStatus(error ? getErrorMessage(error.code) : "Password reset email sent");
     } catch (error) {
       setStatus("Failed to reset password");
     }
@@ -70,6 +71,7 @@ export default function SignIn() {
     setShowResetPassword(!showResetPassword);
   };
 
+  if (!firebase_app.options.apiKey) return <Container component="main"><Typography variant="h4">Guest access only</Typography><Typography>The personal fork does not connect to the team's account service.</Typography><Button href="/demo/">Open the guest itinerary planner</Button></Container>;
   return (
     <>
       <Container component="main" maxWidth="xs">

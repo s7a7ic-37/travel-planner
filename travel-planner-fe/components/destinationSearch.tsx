@@ -11,11 +11,6 @@ import Stack from "@mui/material/Stack";
 import { Typography } from "@mui/material";
 
 const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
-if (!accessToken) {
-  throw new Error(
-    "You must provide a Mapbox access token as an environment variable named NEXT_PUBLIC_ACCESS_TOKEN. See https://docs.mapbox.com/help/how-mapbox-works/access-tokens/ for more information."
-  );
-}
 const DynamicSearchBox = dynamic(
   () => import("@mapbox/search-js-react").then((module) => module.SearchBox),
   {
@@ -58,10 +53,8 @@ export default function Destination({
   if (!accessToken) {
     return (
       <div>
-        You must provide a Mapbox access token as an environment variable named
-        NEXT_PUBLIC_ACCESS_TOKEN. See
-        https://docs.mapbox.com/help/how-mapbox-works/access-tokens/ for more
-        information.
+        Live destination search is unavailable in this personal fork.
+        <a href="/demo/">Try the sample itinerary planner</a> without signing in.
       </div>
     );
   }

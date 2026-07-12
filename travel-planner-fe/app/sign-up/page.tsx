@@ -2,6 +2,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import signUp from "../firebase/auth/signUp";
 import { getErrorMessage } from "../firebase/authErrors";
+import firebase_app from "../firebase/config";
 import { redirect } from "next/navigation";
 import { AuthContext } from "../context/AuthContext";
 import Container from "@mui/material/Container";
@@ -43,6 +44,7 @@ export default function SignUp() {
     }
   };
 
+  if (!firebase_app.options.apiKey) return <Container component="main"><Typography variant="h4">Guest access only</Typography><Typography>This personal fork does not create accounts.</Typography><Button href="/demo/">Open the guest itinerary planner</Button></Container>;
   return (
     <>
       <Container component="main" maxWidth="xs">

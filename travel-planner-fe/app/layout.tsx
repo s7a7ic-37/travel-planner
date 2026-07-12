@@ -1,17 +1,9 @@
 import { AuthContextProvider } from "./context/AuthContext";
-import { Inter } from "next/font/google";
+import { Suspense } from "react";
 import Container from "@/components/appcontainer";
 import Navbar from "@/components/navbar";
 import { NextAppDirEmotionCacheProvider } from "tss-react/next/appDir";
 import AppMuiThemeProvider from "@/shared/AppMuiThemeProvider";
-
-import { Do_Hyeon } from "next/font/google";
-
-const hyeon = Do_Hyeon({
-  weight: "400",
-  subsets: ["latin"],
-  display: "swap",
-});
 
 export const metadata = {
   title: "Ready, Jet Set, Go!",
@@ -36,9 +28,9 @@ export default function RootLayout({
       >
         <AuthContextProvider>
           <NextAppDirEmotionCacheProvider options={{ key: "css" }}>
-            <AppMuiThemeProvider fontFamily={hyeon.style.fontFamily}>
+            <AppMuiThemeProvider fontFamily="system-ui, sans-serif">
               <Navbar />
-              <Container>{children}</Container>
+              <Container><Suspense fallback={<p>Loading itinerary…</p>}>{children}</Suspense></Container>
             </AppMuiThemeProvider>
           </NextAppDirEmotionCacheProvider>
         </AuthContextProvider>

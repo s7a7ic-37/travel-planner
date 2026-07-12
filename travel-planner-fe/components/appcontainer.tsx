@@ -22,6 +22,8 @@ function Container({ children }: ContainerProps) {
           justifyContent="center"
           sx={{
             p: 1,
+            width: "100%",
+            maxWidth: 1200,
           }}
         >
           {children}

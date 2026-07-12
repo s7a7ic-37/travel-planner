@@ -5,8 +5,6 @@ import firebase_app from "..//firebase/config";
 import { User as FirebaseUser } from "firebase/auth";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 
-const auth = getAuth(firebase_app);
-
 interface AuthContextInterface {
   user: FirebaseUser | null;
   name: string | null;
@@ -26,6 +24,11 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
+    if (!firebase_app.options.apiKey) {
+      setLoading(false);
+      return;
+    }
+    const auth = getAuth(firebase_app);
     const updateName = async (uid: string) => {
       if (!uid) return setName(null);
       const db = getFirestore(firebase_app);
@@ -39,7 +42,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
-        updateName(user.uid);
+        updateName(user.uid).catch(() => setName(null));
       } else {
         setUser(null);
         setName(null);

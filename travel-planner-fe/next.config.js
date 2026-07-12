@@ -1,4 +1,8 @@
 const nextConfig = {
+    outputFileTracingRoot: __dirname,
+    output: "export",
+    trailingSlash: true,
+    images: { unoptimized: true },
     reactStrictMode: true,
     transpilePackages: ["@mui/system", "@mui/material", "@mui/icons-material"],
     modularizeImports: {
@@ -10,3 +14,4 @@ const nextConfig = {
         }
     }
 };
+module.exports = nextConfig;

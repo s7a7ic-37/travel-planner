@@ -18,14 +18,13 @@ import LoadingPage from "@/components/loadingPage";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 
-const db = getFirestore(firebase_app);
-
 function Itinerary() {
   const [currentDay, setCurrentDay] = useState<number | null>(null);
   const searchParams = useSearchParams();
   const destination = searchParams.get("destination") || "";
   const { user } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const [itineraryData, setItineraryData] = useState({
     places: [],
     restaurants: [],
@@ -37,9 +36,16 @@ function Itinerary() {
 
     const fetchData = async () => {
       setIsLoading(true);
-      const data = await fetchDataFromFirebase(db, user.uid, destination);
-      setItineraryData(data);
-      setIsLoading(false);
+      setError("");
+      try {
+        const db = getFirestore(firebase_app);
+        const data = await fetchDataFromFirebase(db, user.uid, destination);
+        setItineraryData(data);
+      } catch {
+        setError("The itinerary could not be loaded. Return to your trips and try again.");
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetchData();
@@ -52,6 +58,7 @@ function Itinerary() {
   const days = itineraryData.places.length / 3;
   return (
     <Stack justifyContent="center" alignItems="center">
+      {error && <Typography role="alert">{error}</Typography>}
       <Typography
         variant="h5"
         align="center"

@@ -26,7 +26,7 @@ const Navbar = () => {
         p: 1,
       }}
     >
-      <IconButton style={{ borderRadius: 0 }} onClick={toggleMenu}>
+      <IconButton aria-label="Open navigation menu" style={{ borderRadius: 0 }} onClick={toggleMenu}>
         <MenuIcon />
       </IconButton>
       <SwipeableDrawer

@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import { useBackgroundImage } from "@/shared/AppMuiThemeProvider";
 import Logo from "@/components/logo";
+import firebase_app from "./firebase/config";
 
 export default function LandingPage() {
   const { user } = useContext(AuthContext);
@@ -37,8 +38,10 @@ export default function LandingPage() {
         seamless trip organization and unforgettable adventures!
       </Typography>
       <Button variant="contained" href="/sign-in">
-        Sign in
+        {firebase_app.options.apiKey ? "Sign in" : "About the original sign-in"}
       </Button>
+      <Button variant="contained" href="/demo/">Try the guest itinerary demo</Button>
+      <Typography textAlign="center">Personal maintenance fork of a four-person Northcoders project (2023). The guest demo uses example places and saves only in this browser.</Typography>
       <br></br>
       <Typography
         sx={{
