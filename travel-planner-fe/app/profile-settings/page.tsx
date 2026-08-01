@@ -1,25 +1,17 @@
 "use client";
-import Image from "next/image";
-import styles from "../page.module.css";
+import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 
 export default function ProfileSettings() {
   return (
-    <>
-      <Typography variant="h3">Profile Settings for x</Typography>
-      <Image
-        className={styles.img}
-        src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png"
-        alt="Default avatar icon"
-      />
-      <br></br>
-      <button>Edit avatar</button>
-      <Typography variant="body2">
-        Name: x <button>Edit name</button>
+    <Container component="main" maxWidth="sm">
+      <Typography component="h1" variant="h4">Profile settings</Typography>
+      <Typography sx={{ my: 2 }}>
+        Account editing is not available in this personal fork. The guest
+        itinerary demo works without an account and saves only in your browser.
       </Typography>
-
-      <button>Change password</button>
-      <button className={styles.delete}>Delete account</button>
-    </>
+      <Button variant="contained" href="/demo/">Open the guest itinerary planner</Button>
+    </Container>
   );
 }

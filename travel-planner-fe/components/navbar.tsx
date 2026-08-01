@@ -26,14 +26,13 @@ const Navbar = () => {
         p: 1,
       }}
     >
-      <IconButton aria-label="Open navigation menu" style={{ borderRadius: 0 }} onClick={toggleMenu}>
+      <IconButton aria-label="Open navigation menu" aria-expanded={open} sx={{ borderRadius: 1, minWidth: 44, minHeight: 44, bgcolor: "rgba(255,255,255,.9)", color: "#203e3c" }} onClick={toggleMenu}>
         <MenuIcon />
       </IconButton>
       <SwipeableDrawer
         onOpen={handleOpenMenu}
         open={open}
         onClose={handleCloseMenu}
-        onKeyDown={handleCloseMenu}
       >
         <HamburgerList handleCloseMenu={handleCloseMenu} />
       </SwipeableDrawer>

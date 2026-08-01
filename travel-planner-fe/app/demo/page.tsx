@@ -110,6 +110,7 @@ export default function DemoPlanner() {
           <input
             id="days"
             type="number"
+            inputMode="numeric"
             min="1"
             max="3"
             step="1"
