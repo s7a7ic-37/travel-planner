@@ -1,6 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import DownloadOutlined from "@mui/icons-material/DownloadOutlined";
+import BookmarkBorder from "@mui/icons-material/BookmarkBorder";
+import PrintOutlined from "@mui/icons-material/PrintOutlined";
 import {
   createPlan,
   interests,
@@ -21,6 +24,7 @@ export default function DemoPlanner() {
   const [plan, setPlan] = useState<Plan | null>(null);
   const [message, setMessage] = useState("");
   const [saved, setSaved] = useState(false);
+  const itineraryRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     try {
@@ -37,6 +41,7 @@ export default function DemoPlanner() {
     try {
       setPlan(createPlan(days, preferences));
       setMessage("Sample itinerary ready. Move stops to change the order.");
+      requestAnimationFrame(() => itineraryRef.current?.scrollIntoView({ block: "start" }));
     } catch {
       setMessage("Choose one to three whole days.");
     }
@@ -108,18 +113,31 @@ export default function DemoPlanner() {
 
   return (
     <main className={styles.demo}>
+      <div className={styles.hero}>
       <div className={styles.heading}>
-        <p className={styles.eyebrow}>READY, JET SET, GO! / PERSONAL FORK</p>
+        <p className={styles.eyebrow}>MANCHESTER, AT YOUR PACE</p>
         <h1>
-          A little structure.
+          Make room
           <br />
-          Room to explore.
+          for a good day.
         </h1>
         <p>
           Build a Manchester sample itinerary. Pick your interests, change the
           order, and keep a copy in your browser.
         </p>
-        <span className={styles.badge}>Guest demo · no account needed</span>
+        <div className={styles.heroActions}><a className={styles.startLink} href="#plan-controls">Start planning <span aria-hidden="true">↓</span></a><span className={styles.badge}>Guest demo · no account needed</span></div>
+      </div>
+      <aside className={styles.cityCard} aria-label="Manchester sample city">
+        <div className={styles.cityLabel}><span>CITY EDITION / 001</span><span>UK ↗</span></div>
+        <svg viewBox="0 0 340 150" role="img" aria-label="Abstract city skyline illustration, not a map">
+          <path d="M12 132H328M35 132V68H72V132M81 132V91H119V132M134 132V51H172V132M183 132V78H214V132M230 132V36H265V132M278 132V93H311V132" fill="none" stroke="currentColor" strokeWidth="2" />
+          <path d="M142 51V38H165V51M150 38V17M237 36V25H258V36" fill="none" stroke="currentColor" strokeWidth="2" />
+          <path d="M50 84H58M50 101H58M93 106H105M146 70H159M146 88H159M146 106H159M242 57H252M242 77H252M242 97H252M288 108H299" stroke="currentColor" strokeWidth="3" />
+          <circle cx="294" cy="32" r="15" fill="#e9b78e" /><path d="M16 146C75 120 112 150 169 140S277 143 329 146" fill="none" stroke="#b5482b" strokeWidth="3" />
+        </svg>
+        <h2>Manchester</h2><p>Galleries, canal paths<br />and a little curiosity.</p>
+        <div className={styles.cityStats}><span><b>01—03</b>days</span><span><b>06</b>sample places</span><span><b>YOUR</b>order</span></div>
+      </aside>
       </div>
       <aside className={styles.credit}>
         Originally a four-person Northcoders project, built in 2023. This
@@ -130,11 +148,11 @@ export default function DemoPlanner() {
         </a>
       </aside>
       <div className={styles.layout}>
-        <form className={styles.controls} onSubmit={generate}>
-          <h2>Your starting point</h2>
+        <form id="plan-controls" className={styles.controls} onSubmit={generate}>
+          <p className={styles.eyebrow}>01 / THE STARTING POINT</p><h2>Shape your day.</h2>
           <label htmlFor="destination">Destination</label>
           <select id="destination">
-            <option>Manchester · sample city</option>
+            <option>Manchester, UK</option>
           </select>
           <label htmlFor="days">How many days?</label>
           <input
@@ -168,8 +186,7 @@ export default function DemoPlanner() {
             ))}
           </fieldset>
           <p className={styles.small}>
-            Two stops per day. Preferred categories come first, then other
-            places fill the remaining slots. No random or AI recommendations.
+            Two stops per day. Your interests come first; the other sample places fill the remaining slots.
           </p>
           <button type="submit">Build sample itinerary →</button>
           {saved && (
@@ -182,24 +199,26 @@ export default function DemoPlanner() {
               </button>
             </div>
           )}
-          <div className={styles.transfer}>
+          <details className={styles.transfer}><summary>Import a plan file</summary>
             <label htmlFor="import-plan">Continue from a plan file</label>
             <input id="import-plan" type="file" accept=".json,application/json" onChange={importFile} aria-describedby="import-help" />
             <p className={styles.small} id="import-help">A valid file replaces the open plan. Your saved copy stays unchanged. Files are read here, never uploaded.</p>
-          </div>
+          </details>
         </form>
         <section
           className={styles.itinerary}
+          ref={itineraryRef}
           aria-label="Your sample itinerary"
         >
           {!plan ? (
             <div className={styles.empty}>
-              <span aria-hidden="true">↗</span>
-              <h2>Your days, at a glance.</h2>
+              <span className={styles.emptyMark} aria-hidden="true">↗</span>
+              <p className={styles.eyebrow}>02 / YOUR FIELD NOTES</p><h2>A starting point,<br />not a packed schedule.</h2>
               <p>
                 Choose one to three days and build a plan. A short, editable
                 starting point beats a crowded schedule.
               </p>
+              <div className={styles.steps}><span><b>01</b> Choose your days</span><span><b>02</b> Build a sample plan</span><span><b>03</b> Reorder, save, explore</span></div>
             </div>
           ) : (
             <>
@@ -208,23 +227,22 @@ export default function DemoPlanner() {
                   <p className={styles.eyebrow}>
                     MANCHESTER / {plan.days} {plan.days === 1 ? "DAY" : "DAYS"}
                   </p>
-                  <h2>Your sample itinerary</h2>
+                  <h2>Your sample itinerary</h2><p className={styles.small}>{plan.stops.length} stops · flexible order · saved only when you choose</p>
                 </div>
                 <div className={styles.actions}>
                   <button type="button" onClick={save}>
-                    Save locally
+                    <BookmarkBorder fontSize="small" /> Save locally
                   </button>
-                  <button type="button" onClick={download}>Download plan</button>
+                  <button type="button" onClick={download}><DownloadOutlined fontSize="small" /> Download plan</button>
                   <button type="button" onClick={() => window.print()}>
-                    Print / PDF
+                    <PrintOutlined fontSize="small" /> Print / PDF
                   </button>
                 </div>
               </div>
               {Array.from({ length: plan.days }, (_, day) => (
                 <article className={styles.day} key={day}>
                   <h3>
-                    <span>{String(day + 1).padStart(2, "0")}</span> Day{" "}
-                    {day + 1}
+                    <span>{String(day + 1).padStart(2, "0")}</span><span>Day {day + 1}<small>Two stops. Leave room between them.</small></span>
                   </h3>
                   <ol>
                     {plan.stops
@@ -234,7 +252,7 @@ export default function DemoPlanner() {
                         return (
                           <li key={stop.id}>
                             <div>
-                              <span className={styles.category}>
+                              <span className={styles.category} data-category={stop.category}>
                                 {stop.category}
                               </span>
                               <h4>{stop.name}</h4>

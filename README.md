@@ -40,3 +40,7 @@ Original assets and source retain their existing team provenance; no new license
 Verified guest demo: https://travel-planner-demo.mpasiecki.workers.dev/demo/
 
 CI runs a pinned Gitleaks container against the exported public files, with network disabled, a read-only mount and fully redacted output.
+
+## Visual identity
+
+The personal fork uses a city field-notes identity: cream paper, navy typography, terracotta controls, an abstract skyline and numbered itinerary cards. The old blurred beach/theme layer and unused theme hooks were removed from this fork; no original team assets or history were re-licensed. A mobile start link jumps to controls, and successful generation scrolls to the result. Imports sit in a native disclosure. Light native form controls match the interface regardless of device colour preference. Absolute SVG/PNG/ICO tab icons and an Apple touch icon work on nested routes. The original group backend remains unconfigured.

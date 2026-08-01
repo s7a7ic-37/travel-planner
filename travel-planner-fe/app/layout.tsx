@@ -6,9 +6,16 @@ import { NextAppDirEmotionCacheProvider } from "tss-react/next/appDir";
 import AppMuiThemeProvider from "@/shared/AppMuiThemeProvider";
 
 export const metadata = {
-  title: "Ready, Jet Set, Go!",
+  title: "Ready, Jet Set, Go! · City field notes",
   description:
-    "Welcome to your itinerary travel planner, the ultimate companion for seamless trip organization and unforgettable adventures!",
+    "Build a Manchester sample itinerary, reorder stops and keep a browser-local plan. A personal maintenance fork with original team credit.",
+  icons: {
+    icon: [
+      { url: "/favicon-32.png?v=20261031", type: "image/png", sizes: "32x32" },
+      { url: "/favicon.svg?v=20261031", type: "image/svg+xml" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+  },
 };
 
 export default function RootLayout({
@@ -18,9 +25,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        <link rel="icon" href="./favicon.ico" sizes="any" />
-      </head>
       <body
         style={{
           margin: 0,

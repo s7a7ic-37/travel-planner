@@ -1,36 +1,5 @@
 "use client";
 import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
-import CssBaseline from "@mui/material/CssBaseline";
-interface ContainerProps {
-  children: React.ReactNode;
+export default function Container({ children }: { children: React.ReactNode }) {
+  return <Box sx={{ width: "100%", maxWidth: 1200, mx: "auto", px: { xs: 2, sm: 3 }, boxSizing: "border-box" }}>{children}</Box>;
 }
-function Container({ children }: ContainerProps) {
-  return (
-    <>
-      <Box
-        sx={{
-          p: 0,
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Stack
-          alignItems="center"
-          justifyContent="center"
-          sx={{
-            p: 1,
-            width: "100%",
-            maxWidth: 1200,
-          }}
-        >
-          {children}
-        </Stack>
-      </Box>
-    </>
-  );
-}
-
-export default Container;

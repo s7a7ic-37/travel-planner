@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
 import IconButton from "@mui/material/IconButton";
-import Stack from "@mui/material/Stack";
+import Link from "next/link";
+import styles from "./navbar.module.css";
 import MenuIcon from "@mui/icons-material/Menu";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import HamburgerList from "./hamburgerMenu";
@@ -19,14 +20,10 @@ const Navbar = () => {
     setOpen(false);
   };
   return (
-    <Stack
-      direction="row"
-      justifyContent="space-between"
-      sx={{
-        p: 1,
-      }}
-    >
-      <IconButton aria-label="Open navigation menu" aria-expanded={open} sx={{ borderRadius: 1, minWidth: 44, minHeight: 44, bgcolor: "rgba(255,255,255,.9)", color: "#203e3c" }} onClick={toggleMenu}>
+    <header className={styles.bar}>
+      <Link href="/demo/" className={styles.brand}><img src="/favicon.svg" width="38" height="38" alt="" /><span><strong>Ready, Jet Set, Go!</strong><small>CITY FIELD NOTES · PERSONAL FORK</small></span></Link>
+      <a className={styles.source} href="https://github.com/s7a7ic-37/travel-planner">Source & team credit ↗</a>
+      <IconButton aria-label="Open navigation menu" aria-expanded={open} sx={{ borderRadius: 2, minWidth: 44, minHeight: 44, bgcolor: "#fffdf7", color: "#24354a", border: "1px solid #d9d2c4" }} onClick={toggleMenu}>
         <MenuIcon />
       </IconButton>
       <SwipeableDrawer
@@ -37,7 +34,7 @@ const Navbar = () => {
         <HamburgerList handleCloseMenu={handleCloseMenu} />
       </SwipeableDrawer>
       <CurrentUser />
-    </Stack>
+    </header>
   );
 };
 
