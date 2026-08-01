@@ -1,6 +1,21 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createPlan, moveStop, restorePlan } from "../lib/demo.ts";
+import { createPlan, moveStop, restorePlan, exportPlan, importPlanFile } from "../lib/demo.ts";
+
+test("portable plans preserve the reordered itinerary and only use known place text", async () => {
+  const plan = moveStop(createPlan(3, ["Culture"]), 1, -1);
+  const text = exportPlan(plan);
+  assert.deepEqual(await importPlanFile({ size: Buffer.byteLength(text), text: async () => text }), plan);
+  const altered = structuredClone(plan);
+  altered.stops[0].name = "Injected name";
+  assert.equal(JSON.parse(exportPlan(altered)).stops[0].name, plan.stops[0].name);
+});
+
+test("imports reject oversized files before reading and reject malformed plans", async () => {
+  await assert.rejects(importPlanFile({ size: 6001, text: () => { throw new Error("Must not read"); } }), /6 KB/);
+  await assert.rejects(importPlanFile({ size: 2, text: async () => "{}" }), /Unrecognized/);
+  await assert.rejects(importPlanFile({ size: 8, text: async () => "not json" }));
+});
 
 test("plans have two unique stops per day, with preferred categories first", () => {
   const plan = createPlan(3, ["Outdoors"]);

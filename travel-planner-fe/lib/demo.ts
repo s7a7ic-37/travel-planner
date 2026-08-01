@@ -99,6 +99,15 @@ export function restorePlan(text: string): Plan {
   };
 }
 
+export function exportPlan(plan: Plan): string {
+  return JSON.stringify(restorePlan(JSON.stringify(plan)), null, 2);
+}
+
+export async function importPlanFile(file: Pick<File, "size" | "text">): Promise<Plan> {
+  if (file.size > 6000) throw new Error("Plan files must be no larger than 6 KB.");
+  return restorePlan(await file.text());
+}
+
 export function moveStop(plan: Plan, index: number, delta: -1 | 1): Plan {
   const next = index + delta;
   if (

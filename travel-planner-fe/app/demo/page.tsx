@@ -6,6 +6,8 @@ import {
   interests,
   moveStop,
   restorePlan,
+  exportPlan,
+  importPlanFile,
   type Interest,
   type Plan,
 } from "@/lib/demo";
@@ -73,6 +75,34 @@ export default function DemoPlanner() {
       setMessage("Saved copy removed. Your open plan is still here.");
     } catch {
       setMessage("Browser storage could not be updated.");
+    }
+  }
+
+  function download() {
+    if (!plan) return;
+    const url = URL.createObjectURL(new Blob([exportPlan(plan)], { type: "application/json" }));
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "manchester-sample-plan.json";
+    link.click();
+    URL.revokeObjectURL(url);
+    setMessage("Downloaded your sample plan. Import it in another browser to continue.");
+  }
+
+  async function importFile(event: React.ChangeEvent<HTMLInputElement>) {
+    const input = event.currentTarget;
+    const file = input.files?.[0];
+    if (!file) return;
+    try {
+      const imported = await importPlanFile(file);
+      setPlan(imported);
+      setDays(imported.days);
+      setPreferences(imported.preferences);
+      setMessage("Imported the sample plan. Your saved browser copy is unchanged until you save.");
+    } catch {
+      setMessage("That plan could not be imported. Use a valid sample-plan JSON file under 6 KB. Your open plan is unchanged.");
+    } finally {
+      input.value = "";
     }
   }
 
@@ -152,6 +182,11 @@ export default function DemoPlanner() {
               </button>
             </div>
           )}
+          <div className={styles.transfer}>
+            <label htmlFor="import-plan">Continue from a plan file</label>
+            <input id="import-plan" type="file" accept=".json,application/json" onChange={importFile} aria-describedby="import-help" />
+            <p className={styles.small} id="import-help">A valid file replaces the open plan. Your saved copy stays unchanged. Files are read here, never uploaded.</p>
+          </div>
         </form>
         <section
           className={styles.itinerary}
@@ -179,6 +214,7 @@ export default function DemoPlanner() {
                   <button type="button" onClick={save}>
                     Save locally
                   </button>
+                  <button type="button" onClick={download}>Download plan</button>
                   <button type="button" onClick={() => window.print()}>
                     Print / PDF
                   </button>

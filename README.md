@@ -6,7 +6,9 @@ Maksymilian's original contributions included Firebase authentication, itinerary
 
 ## Guest demo
 
-The personal fork adds /demo/: choose one to three days in a Manchester example, prioritize interests, move stops, save/load a plan in localStorage and print it. Six curated example places make the flow inspectable without accounts or paid APIs. This is not live search, routing or travel advice. Opening times, accessibility, availability and journey times are not checked. Location links open OpenStreetMap searches; no map feed is embedded.
+The personal fork adds /demo/: choose one to three days in a Manchester example, prioritize interests, move stops, save/load a plan in localStorage, download/import a plan file and print it. Six curated example places make the flow inspectable without accounts or paid APIs. This is not live search, routing or travel advice. Opening times, accessibility, availability and journey times are not checked. Location links open OpenStreetMap searches; no map feed is embedded.
+
+Downloaded JSON plans can be imported in another browser. Imports are capped at 6 KB before reading, validated against known place IDs and normalized to the curated place text. Invalid files leave the open plan untouched. Import replaces the open plan only; the existing saved browser copy is unchanged until Save locally is chosen. Files are processed locally and never uploaded.
 
 Local save data is validated against known place IDs before loading. No personal fields or account details are requested. Removing the saved copy leaves the open itinerary intact.
 
@@ -19,7 +21,7 @@ Use Node.js 22. Inside travel-planner-fe:
     npm run build
     npm run dev
 
-The build exports static pages to travel-planner-fe/out. Six tests cover plan boundaries, unique stops, reordering, safe persistence and malformed day links. An offline SDK smoke check also constructs Firebase document and query references without network access. The original pnpm lockfile remains as historical source; npm and the current package-lock.json are used for this maintenance fork.
+The build exports static pages to travel-planner-fe/out. Tests cover plan boundaries, unique stops, reordering, safe persistence, file-transfer boundaries and malformed day links. An offline SDK smoke check also constructs Firebase document and query references without network access. The original pnpm lockfile remains as historical source; npm and the current package-lock.json are used for this maintenance fork.
 
 ## Retained integrations and limits
 
