@@ -2,7 +2,7 @@
 .brand { display: inline-flex; align-items: center; gap: 12px; color: #24354a; text-decoration: none; margin-right: auto; }
 .brand img { width: 38px; height: 38px; }
 .brand strong { display: block; font: 700 15px/1.3 Georgia, serif; }
-.brand small { display: block; margin-top: 3px; color: #6e7480; font-size: 9px; letter-spacing: .1em; }
+.brand small { display: block; margin-top: 3px; color: #626978; font-size: 9px; letter-spacing: .1em; }
 .source { color: #586777; font-size: 12px; text-underline-offset: 4px; display: inline-flex; align-items: center; min-height: 44px; }
 @media(max-width:600px) { .bar { min-height: 76px; gap: 8px; } .source { display: none; } .brand strong { font-size: 13px; } .brand small { font-size: 8px; } }
 @media print { .bar { display: none; } }

@@ -17,7 +17,7 @@ export default function AppMuiThemeProvider(props: { children: React.ReactNode; 
       primary: { main: "#b5482b", contrastText: "#ffffff" },
       secondary: { main: "#24354a" },
       background: { paper: "#fffdf7", default: "#f6f1e7" },
-      text: { primary: "#24354a", secondary: "#66707b" },
+      text: { primary: "#24354a", secondary: "#5e6978" },
       divider: "#ddd6c8",
     },
     typography: { fontFamily: props.fontFamily },

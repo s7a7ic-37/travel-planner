@@ -2,20 +2,20 @@
 .demo, .demo * { box-sizing: border-box; }
 .hero { display: grid; grid-template-columns: minmax(0,1fr) 350px; gap: 64px; align-items: center; padding: 8px 0 32px; }
 .heading h1 { font: 500 clamp(42px,5.8vw,74px)/1.03 Georgia,serif; letter-spacing: -.045em; margin: 18px 0 24px; }
-.heading > p:not(.eyebrow) { max-width: 500px; font-size: 16px; color: #647080; }
+.heading > p:not(.eyebrow) { max-width: 500px; font-size: 16px; color: #5e6978; }
 .eyebrow { margin: 0 0 10px; color: #a44229; font-size: 10px; font-weight: 750; letter-spacing: .12em; }
 .badge { display: inline-flex; padding: 6px 11px; margin-top: 8px; border: 1px solid #d9d2c4; border-radius: 4px; font-size: 10px; color: #586777; background: #fffdf7; }
 .heroActions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 22px; }
 .demo .startLink { display: inline-flex; align-items: center; gap: 20px; min-height: 46px; padding: 0 16px; background: #24354a; color: #fffdf7; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: 650; }
 .heroActions .badge { margin-top: 0; }
 .cityCard { padding: 22px 26px; border: 1px solid #d7cbb9; border-radius: 6px 6px 24px 6px; background: #eee3cf; transform: rotate(2deg); }
-.cityLabel { display: flex; justify-content: space-between; gap: 10px; color: #75644e; font: 9px/1.4 ui-monospace,monospace; letter-spacing: .06em; }
+.cityLabel { display: flex; justify-content: space-between; gap: 10px; color: #6b5c48; font: 9px/1.4 ui-monospace,monospace; letter-spacing: .06em; }
 .cityCard svg { display: block; width: 100%; margin: 12px 0 8px; color: #647581; }
 .cityCard h2 { margin: 0; font: 500 35px/1.2 Georgia,serif; letter-spacing: -.03em; }
 .cityCard > p { font-size: 12px; color: #68717a; margin: 8px 0 20px; }
-.cityStats { display: flex; justify-content: space-between; gap: 10px; border-top: 1px dashed #c4b499; padding-top: 14px; font-size: 9px; color: #75644e; }
+.cityStats { display: flex; justify-content: space-between; gap: 10px; border-top: 1px dashed #c4b499; padding-top: 14px; font-size: 9px; color: #6b5c48; }
 .cityStats b { display: block; font: 600 17px/1.5 Georgia,serif; color: #24354a; }
-.credit { margin: 20px 0 32px; padding: 16px 0; border-top: 1px solid #d9d2c4; border-bottom: 1px solid #d9d2c4; font-size: 11px; color: #647080; }
+.credit { margin: 20px 0 32px; padding: 16px 0; border-top: 1px solid #d9d2c4; border-bottom: 1px solid #d9d2c4; font-size: 11px; color: #5e6978; }
 .demo a { color: #a44229; text-underline-offset: 4px; }
 .layout { display: grid; grid-template-columns: 280px minmax(0,1fr); gap: 32px; }
 .controls { padding: 24px; background: #fffdf7; border: 1px solid #ddd6c8; border-top: 3px solid #b5482b; border-radius: 8px; align-self: start; scroll-margin-top: 24px; }
@@ -26,7 +26,7 @@
 .controls legend { font-size: 11px; font-weight: 700; margin-bottom: 8px; }
 .choice { display: flex; gap: 10px; align-items: center; min-height: 44px; font-size: 13px; }
 .choice input { accent-color: #b5482b; width: 18px; height: 18px; }
-.small, .caution { font-size: 11px; color: #647080; }
+.small, .caution { font-size: 11px; color: #5e6978; }
 .demo button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-width: 44px; min-height: 44px; padding: 9px 12px; border: 1px solid #d3c9b8; border-radius: 6px; background: #fffdf7; color: #24354a; font: 600 11px system-ui,sans-serif; cursor: pointer; }
 .demo button:hover { background: #eee5d5; }
 .demo button:disabled { opacity: .38; cursor: default; }
@@ -43,8 +43,8 @@
 .empty { padding: 38px; border: 1px dashed #c9bea9; border-radius: 8px; background: #f1eadc; min-height: 430px; }
 .emptyMark { display: inline-grid; place-items: center; width: 48px; height: 48px; margin-bottom: 32px; border: 1px solid #c9bea9; border-radius: 50%; color: #b5482b; font-size: 26px; }
 .empty h2 { font-size: 34px; }
-.empty > p:not(.eyebrow) { max-width: 390px; font-size: 14px; color: #647080; }
-.steps { display: flex; flex-wrap: wrap; gap: 14px 24px; margin-top: 28px; border-top: 1px solid #d9d0bf; padding-top: 20px; font-size: 10px; color: #647080; }
+.empty > p:not(.eyebrow) { max-width: 390px; font-size: 14px; color: #5e6978; }
+.steps { display: flex; flex-wrap: wrap; gap: 14px 24px; margin-top: 28px; border-top: 1px solid #d9d0bf; padding-top: 20px; font-size: 10px; color: #5e6978; }
 .steps b { display: block; color: #a44229; font: 13px/1.7 ui-monospace,monospace; }
 .planHeading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: start; gap: 14px; margin: 0 0 24px; }
 .planHeading h2 { margin-bottom: 8px; }
@@ -53,7 +53,7 @@
 .day { background: #fffdf7; border: 1px solid #ddd6c8; border-radius: 8px; margin-bottom: 20px; overflow: hidden; }
 .day h3 { display: flex; gap: 16px; align-items: center; padding: 18px 24px; margin: 0; border-bottom: 1px solid #e7dfd2; font: 500 23px Georgia,serif; }
 .day h3 > span:first-child { font: 500 32px Georgia,serif; color: #b5482b; border-right: 1px solid #ddd6c8; padding-right: 16px; }
-.day h3 small { display: block; margin-top: 5px; color: #647080; font: 10px system-ui,sans-serif; }
+.day h3 small { display: block; margin-top: 5px; color: #5e6978; font: 10px system-ui,sans-serif; }
 .day ol { list-style: none; margin: 0; padding: 0 24px; }
 .day li { display: flex; justify-content: space-between; gap: 18px; padding: 24px 0; border-bottom: 1px dashed #ddd6c8; }
 .day li:last-child { border-bottom: 0; }
@@ -62,7 +62,7 @@
 .category[data-category="Museums"] { background: #e5ebf1; color: #3e5b78; }
 .category[data-category="Outdoors"] { background: #e6eddd; color: #53683b; }
 .day h4 { font: 500 24px/1.2 Georgia,serif; letter-spacing: -.02em; margin: 10px 0; }
-.day p { font-size: 12px; color: #647080; margin: 0 0 12px; }
+.day p { font-size: 12px; color: #5e6978; margin: 0 0 12px; }
 .day a { display: inline-flex; align-items: center; min-height: 44px; font-size: 10px; }
 .reorder { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; align-self: center; }
 .reorder button { padding: 6px; font-size: 19px; background: #fbf8f0; }

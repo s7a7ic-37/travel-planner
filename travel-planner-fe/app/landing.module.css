@@ -2,18 +2,18 @@
 .eyebrow { font-size: 10px; font-weight: 750; letter-spacing: .12em; color: #a44229; }
 .landing h1 { font: 500 clamp(38px,5vw,66px)/1.08 Georgia,serif; letter-spacing: -.04em; margin: 20px 0; }
 .landing h1 em { font-weight: 400; color: #b5482b; }
-.lede { max-width: 500px; font-size: 16px; line-height: 1.8; color: #647080; }
+.lede { max-width: 500px; font-size: 16px; line-height: 1.8; color: #5e6978; }
 .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; margin-top: 28px; }
 .actions a { min-height: 46px; display: inline-flex; align-items: center; font-size: 12px; font-weight: 650; color: #24354a; text-underline-offset: 4px; }
 .actions a:first-child { padding: 0 18px; border-radius: 6px; background: #b5482b; color: #fff; text-decoration: none; }
-.note { color: #647080; font-size: 10px; margin-top: 24px; }
+.note { color: #5e6978; font-size: 10px; margin-top: 24px; }
 .postcard { padding: 32px; background: #eee3cf; border: 1px solid #d7cbb9; border-radius: 6px 6px 24px 6px; transform: rotate(2deg); }
-.postcard > span { font: 10px ui-monospace,monospace; letter-spacing: .1em; color: #75644e; }
+.postcard > span { font: 10px ui-monospace,monospace; letter-spacing: .1em; color: #6b5c48; }
 .postcard img { display: block; margin: 30px 0; }
 .postcard h2 { font: 500 35px/1.15 Georgia,serif; margin: 12px 0; }
-.postcard p { color: #75644e; font: 10px ui-monospace,monospace; }
+.postcard p { color: #6b5c48; font: 10px ui-monospace,monospace; }
 .postcard a { min-height: 44px; display: inline-flex; align-items: center; color: #a44229; font-size: 12px; text-underline-offset: 4px; }
-.landing footer { grid-column: 1/-1; border-top: 1px solid #d9d2c4; padding-top: 24px; font-size: 11px; color: #647080; }
+.landing footer { grid-column: 1/-1; border-top: 1px solid #d9d2c4; padding-top: 24px; font-size: 11px; color: #5e6978; }
 .landing footer a { color: #a44229; }
 .landing a:focus-visible { outline: 3px solid #cf7c32; outline-offset: 4px; }
 @media(max-width:760px) { .landing { grid-template-columns: 1fr; margin: 38px auto; gap: 30px; } .postcard { transform: none; padding: 24px; } .landing h1 { font-size: 43px; } }
