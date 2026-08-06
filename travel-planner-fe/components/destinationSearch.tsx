@@ -53,7 +53,7 @@ export default function Destination({
   if (!accessToken) {
     return (
       <div>
-        Live destination search is unavailable in this personal fork.
+        Live destination search is unavailable.
         <a href="/demo/">Try the sample itinerary planner</a> without signing in.
       </div>
     );

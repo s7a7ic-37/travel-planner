@@ -62,7 +62,7 @@ export const PlacesMap = ({
   const mapRef = useRef<MapRef | null>(null);
   const [popupInfo, setPopupInfo] = useState<LocationProps | null>(null);
   if (!accessToken) {
-    return <Paper sx={{p:2}}><Typography>The live map is unavailable in this personal fork. Place names and addresses are listed below.</Typography></Paper>;
+    return <Paper sx={{p:2}}><Typography>The live map is unavailable. Place names and addresses are listed below.</Typography></Paper>;
   }
   const allPlaces = [...places, ...restaurants];
   const DEFAULT_LAT = destinationCoordinates.lat;

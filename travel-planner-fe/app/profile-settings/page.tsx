@@ -8,7 +8,7 @@ export default function ProfileSettings() {
     <Container component="main" maxWidth="sm">
       <Typography component="h1" variant="h4">Profile settings</Typography>
       <Typography sx={{ my: 2 }}>
-        Account editing is not available in this personal fork. The guest
+        Account editing is unavailable. The guest
         itinerary demo works without an account and saves only in your browser.
       </Typography>
       <Button variant="contained" href="/demo/">Open the guest itinerary planner</Button>

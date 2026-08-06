@@ -6,9 +6,9 @@ import { NextAppDirEmotionCacheProvider } from "tss-react/next/appDir";
 import AppMuiThemeProvider from "@/shared/AppMuiThemeProvider";
 
 export const metadata = {
-  title: "Ready, Jet Set, Go! · City field notes",
+  title: "Ready, Jet Set, Go! · Manchester planner",
   description:
-    "Build a Manchester sample itinerary, reorder stops and keep a browser-local plan. A personal maintenance fork with original team credit.",
+    "Plan a Manchester city break, explore 18 places and save your itinerary.",
   icons: {
     icon: [
       { url: "/favicon-32.png?v=20261031", type: "image/png", sizes: "32x32" },
@@ -32,7 +32,7 @@ export default function RootLayout({
       >
         <AuthContextProvider>
           <NextAppDirEmotionCacheProvider options={{ key: "css" }}>
-            <AppMuiThemeProvider fontFamily="system-ui, sans-serif">
+            <AppMuiThemeProvider>
               <Navbar />
               <Container><Suspense fallback={<p>Loading itinerary…</p>}>{children}</Suspense></Container>
             </AppMuiThemeProvider>

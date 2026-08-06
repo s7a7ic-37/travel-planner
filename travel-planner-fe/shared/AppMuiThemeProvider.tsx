@@ -10,17 +10,17 @@ const LinkBehaviour = forwardRef(function LinkBehaviour(props, ref) {
   return <NextLink ref={ref} {...props} />;
 });
 
-export default function AppMuiThemeProvider(props: { children: React.ReactNode; fontFamily?: string }) {
+export default function AppMuiThemeProvider(props: { children: React.ReactNode }) {
   const theme = useMemo(() => createTheme({
     palette: {
       mode: "light",
-      primary: { main: "#b5482b", contrastText: "#ffffff" },
+      primary: { main: "#1a6778", contrastText: "#ffffff" },
       secondary: { main: "#24354a" },
-      background: { paper: "#fffdf7", default: "#f6f1e7" },
+      background: { paper: "#ffffff", default: "#f4f9fb" },
       text: { primary: "#24354a", secondary: "#5e6978" },
       divider: "#ddd6c8",
     },
-    typography: { fontFamily: props.fontFamily },
+    typography: { fontFamily: '"Trebuchet MS", Arial, sans-serif' },
     shape: { borderRadius: 10 },
     components: {
       MuiLink: { defaultProps: {
@@ -29,8 +29,8 @@ export default function AppMuiThemeProvider(props: { children: React.ReactNode; 
       } },
       MuiButtonBase: { defaultProps: { LinkComponent: LinkBehaviour } },
       MuiButton: { styleOverrides: { root: { minHeight: 44, textTransform: "none", fontWeight: 650 } } },
-      MuiCssBaseline: { styleOverrides: { html: { colorScheme: "light" }, body: { backgroundColor: "#f6f1e7" } } },
+      MuiCssBaseline: { styleOverrides: { html: { colorScheme: "light" }, body: { backgroundColor: "#f4f9fb" } } },
     },
-  }), [props.fontFamily]);
+  }), []);
   return <ThemeProvider theme={theme}><CssBaseline /><div id="app-container">{props.children}</div></ThemeProvider>;
 }

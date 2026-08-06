@@ -1,6 +1,27 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createPlan, moveStop, restorePlan, exportPlan, importPlanFile } from "../lib/demo.ts";
+import { createPlan, moveStop, restorePlan, exportPlan, importPlanFile, places, interests } from "../lib/demo.ts";
+
+test("alternative plans reach the full catalogue and remain portable", () => {
+  assert.equal(places.length, 18);
+  assert.equal(new Set(places.map(place => place.id)).size, places.length);
+  const reached = new Set();
+  for (let variation = 0; variation < places.length; variation++) {
+    for (const preference of [[], ...interests.map(interest => [interest])]) {
+      const plan = createPlan(3, preference, variation);
+      assert.equal(new Set(plan.stops.map(stop => stop.id)).size, 6);
+      if (preference.length) assert.ok(plan.stops.every(stop => stop.category === preference[0]));
+      else plan.stops.forEach(stop => reached.add(stop.id));
+      const text = exportPlan(plan);
+      assert.ok(Buffer.byteLength(text) <= 6000);
+      assert.deepEqual(restorePlan(text), plan);
+    }
+  }
+  assert.equal(reached.size, places.length);
+  assert.deepEqual(createPlan(2, [], places.length), createPlan(2, []));
+  assert.throws(() => createPlan(2, [], -1));
+  assert.throws(() => createPlan(2, [], 1.5));
+});
 
 test("portable plans preserve the reordered itinerary and only use known place text", async () => {
   const plan = moveStop(createPlan(3, ["Culture"]), 1, -1);

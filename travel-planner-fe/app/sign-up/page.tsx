@@ -44,7 +44,7 @@ export default function SignUp() {
     }
   };
 
-  if (!firebase_app.options.apiKey) return <Container component="main"><Typography variant="h4">Guest access only</Typography><Typography>This personal fork does not create accounts.</Typography><Button href="/demo/">Open the guest itinerary planner</Button></Container>;
+  if (!firebase_app.options.apiKey) return <Container component="main"><Typography variant="h4">Guest access only</Typography><Typography>Use the planner without an account.</Typography><Button href="/demo/">Open the guest itinerary planner</Button></Container>;
   return (
     <>
       <Container component="main" maxWidth="xs">

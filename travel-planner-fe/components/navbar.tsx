@@ -21,8 +21,8 @@ const Navbar = () => {
   };
   return (
     <header className={styles.bar}>
-      <Link href="/demo/" className={styles.brand}><img src="/favicon.svg" width="38" height="38" alt="" /><span><strong>Ready, Jet Set, Go!</strong><small>CITY FIELD NOTES · PERSONAL FORK</small></span></Link>
-      <a className={styles.source} href="https://github.com/s7a7ic-37/travel-planner">Source & team credit ↗</a>
+      <Link href="/demo/" className={styles.brand}><img src="/favicon.svg" width="38" height="38" alt="" /><strong>Ready, Jet Set, Go!</strong></Link>
+      <a className={styles.source} href="https://github.com/s7a7ic-37/travel-planner">GitHub ↗</a>
       <IconButton aria-label="Open navigation menu" aria-expanded={open} sx={{ borderRadius: 2, minWidth: 44, minHeight: 44, bgcolor: "#fffdf7", color: "#24354a", border: "1px solid #d9d2c4" }} onClick={toggleMenu}>
         <MenuIcon />
       </IconButton>

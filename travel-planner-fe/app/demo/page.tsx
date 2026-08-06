@@ -8,6 +8,7 @@ import {
   createPlan,
   interests,
   moveStop,
+  places,
   restorePlan,
   exportPlan,
   importPlanFile,
@@ -25,6 +26,7 @@ export default function DemoPlanner() {
   const [message, setMessage] = useState("");
   const [saved, setSaved] = useState(false);
   const itineraryRef = useRef<HTMLElement>(null);
+  const variation = useRef(0);
 
   useEffect(() => {
     try {
@@ -39,8 +41,14 @@ export default function DemoPlanner() {
   function generate(event: React.FormEvent) {
     event.preventDefault();
     try {
-      setPlan(createPlan(days, preferences));
-      setMessage("Sample itinerary ready. Move stops to change the order.");
+      let next = createPlan(days, preferences, variation.current);
+      variation.current += 1;
+      if (plan && next.stops.every((stop, index) => stop.id === plan.stops[index]?.id)) {
+        next = createPlan(days, preferences, variation.current);
+        variation.current += 1;
+      }
+      setPlan(next);
+      setMessage("Itinerary ready.");
       requestAnimationFrame(() => itineraryRef.current?.scrollIntoView({ block: "start" }));
     } catch {
       setMessage("Choose one to three whole days.");
@@ -51,7 +59,7 @@ export default function DemoPlanner() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(plan));
       setSaved(true);
-      setMessage("Saved in this browser. No account or upload.");
+      setMessage("Saved in this browser.");
     } catch {
       setMessage(
         "The browser could not save this plan. Try printing a copy instead.",
@@ -65,7 +73,7 @@ export default function DemoPlanner() {
       setPlan(loaded);
       setDays(loaded.days);
       setPreferences(loaded.preferences);
-      setMessage("Loaded your saved sample itinerary.");
+      setMessage("Saved itinerary loaded.");
     } catch {
       setMessage(
         "That saved plan could not be read. Build a new plan to replace it.",
@@ -115,41 +123,24 @@ export default function DemoPlanner() {
     <main className={styles.demo}>
       <div className={styles.hero}>
       <div className={styles.heading}>
-        <p className={styles.eyebrow}>MANCHESTER, AT YOUR PACE</p>
-        <h1>
-          Make room
-          <br />
-          for a good day.
-        </h1>
-        <p>
-          Build a Manchester sample itinerary. Pick your interests, change the
-          order, and keep a copy in your browser.
-        </p>
-        <div className={styles.heroActions}><a className={styles.startLink} href="#plan-controls">Start planning <span aria-hidden="true">↓</span></a><span className={styles.badge}>Guest demo · no account needed</span></div>
+        <h1>Your Manchester.<br /><span>Your way.</span></h1>
+        <div className={styles.heroActions}><a className={styles.startLink} href="#plan-controls">Plan a city day <span aria-hidden="true">↗</span></a></div>
       </div>
-      <aside className={styles.cityCard} aria-label="Manchester sample city">
-        <div className={styles.cityLabel}><span>CITY EDITION / 001</span><span>UK ↗</span></div>
+      <aside className={styles.cityCard} aria-label="Manchester">
+        <div className={styles.cityLabel}><span>Manchester</span><span>UK ↗</span></div>
         <svg viewBox="0 0 340 150" role="img" aria-label="Abstract city skyline illustration, not a map">
           <path d="M12 132H328M35 132V68H72V132M81 132V91H119V132M134 132V51H172V132M183 132V78H214V132M230 132V36H265V132M278 132V93H311V132" fill="none" stroke="currentColor" strokeWidth="2" />
           <path d="M142 51V38H165V51M150 38V17M237 36V25H258V36" fill="none" stroke="currentColor" strokeWidth="2" />
           <path d="M50 84H58M50 101H58M93 106H105M146 70H159M146 88H159M146 106H159M242 57H252M242 77H252M242 97H252M288 108H299" stroke="currentColor" strokeWidth="3" />
           <circle cx="294" cy="32" r="15" fill="#e9b78e" /><path d="M16 146C75 120 112 150 169 140S277 143 329 146" fill="none" stroke="#b5482b" strokeWidth="3" />
         </svg>
-        <h2>Manchester</h2><p>Galleries, canal paths<br />and a little curiosity.</p>
-        <div className={styles.cityStats}><span><b>01—03</b>days</span><span><b>06</b>sample places</span><span><b>YOUR</b>order</span></div>
+        <h2>A little city escape.</h2>
+        <div className={styles.cityStats}><span><b>01—03</b>days</span><span><b>{places.length}</b>places</span><span><b>YOUR</b>order</span></div>
       </aside>
       </div>
-      <aside className={styles.credit}>
-        Originally a four-person Northcoders project, built in 2023. This
-        maintenance fork adds a guest demo; the original Firebase and Mapbox
-        integrations remain in the source.{" "}
-        <a href="https://github.com/lai1372/travel-planner">
-          Original team repository ↗
-        </a>
-      </aside>
       <div className={styles.layout}>
         <form id="plan-controls" className={styles.controls} onSubmit={generate}>
-          <p className={styles.eyebrow}>01 / THE STARTING POINT</p><h2>Shape your day.</h2>
+          <h2>Make a plan</h2>
           <label htmlFor="destination">Destination</label>
           <select id="destination">
             <option>Manchester, UK</option>
@@ -185,10 +176,7 @@ export default function DemoPlanner() {
               </label>
             ))}
           </fieldset>
-          <p className={styles.small}>
-            Two stops per day. Your interests come first; the other sample places fill the remaining slots.
-          </p>
-          <button type="submit">Build sample itinerary →</button>
+          <button type="submit">{plan ? "Try another plan ↻" : "Build itinerary →"}</button>
           {saved && (
             <div className={styles.saved}>
               <button type="button" onClick={load}>
@@ -208,17 +196,13 @@ export default function DemoPlanner() {
         <section
           className={styles.itinerary}
           ref={itineraryRef}
-          aria-label="Your sample itinerary"
+          aria-label="Your itinerary"
         >
           {!plan ? (
             <div className={styles.empty}>
               <span className={styles.emptyMark} aria-hidden="true">↗</span>
-              <p className={styles.eyebrow}>02 / YOUR FIELD NOTES</p><h2>A starting point,<br />not a packed schedule.</h2>
-              <p>
-                Choose one to three days and build a plan. A short, editable
-                starting point beats a crowded schedule.
-              </p>
-              <div className={styles.steps}><span><b>01</b> Choose your days</span><span><b>02</b> Build a sample plan</span><span><b>03</b> Reorder, save, explore</span></div>
+              <h2>Where will the day take you?</h2>
+              <p>Choose your days and interests to get started.</p>
             </div>
           ) : (
             <>
@@ -227,7 +211,7 @@ export default function DemoPlanner() {
                   <p className={styles.eyebrow}>
                     MANCHESTER / {plan.days} {plan.days === 1 ? "DAY" : "DAYS"}
                   </p>
-                  <h2>Your sample itinerary</h2><p className={styles.small}>{plan.stops.length} stops · flexible order · saved only when you choose</p>
+                  <h2>Your itinerary</h2>
                 </div>
                 <div className={styles.actions}>
                   <button type="button" onClick={save}>
@@ -242,7 +226,7 @@ export default function DemoPlanner() {
               {Array.from({ length: plan.days }, (_, day) => (
                 <article className={styles.day} key={day}>
                   <h3>
-                    <span>{String(day + 1).padStart(2, "0")}</span><span>Day {day + 1}<small>Two stops. Leave room between them.</small></span>
+                    <span>{String(day + 1).padStart(2, "0")}</span><span>Day {day + 1}</span>
                   </h3>
                   <ol>
                     {plan.stops
@@ -304,14 +288,10 @@ export default function DemoPlanner() {
           </p>
         </section>
       </div>
-      <p className={styles.caution}>
-        Example places only. Opening times, availability, accessibility, journey
-        times and prices are not checked. There is no live search, map feed or
-        route optimisation in guest mode. Verify details before travelling.
-      </p>
+      <details className={styles.about}><summary>About the places</summary><p>A curated Manchester catalogue, not live search or route planning. Check opening times, travel, availability and accessibility before visiting.</p><a href="https://www.visitmanchester.com/things-to-see-and-do/">Manchester visitor directory ↗</a></details>
       <p className={styles.links}>
         <a href="https://github.com/s7a7ic-37/travel-planner">
-          Fork source & team credit ↗
+          Source ↗
         </a>
         <a href="https://portfolio.artemislab.co.uk">
           Maksymilian’s portfolio ↗
