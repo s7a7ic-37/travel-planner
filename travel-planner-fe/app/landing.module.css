@@ -1,15 +1,15 @@
-.landing { width: min(1120px,100%); margin: 70px auto; display: grid; grid-template-columns: minmax(0,1.5fr) minmax(0,1fr); gap: 50px; align-items: center; color: #24354a; font-family: "Trebuchet MS",Arial,sans-serif; }
+.landing { width: min(1120px,100%); margin: 70px auto; display: grid; grid-template-columns: minmax(0,1.5fr) minmax(0,1fr); gap: 50px; align-items: center; color: var(--travel-ink); font-family: "Trebuchet MS",Arial,sans-serif; }
 .landing h1 { font: 800 clamp(42px,6vw,76px)/1.06 "Trebuchet MS",Arial,sans-serif; letter-spacing: -.05em; margin: 20px 0; }
-.landing h1 em { font-style: normal; color: #1a6778; }
+.landing h1 em { font-style: normal; color: var(--travel-accent); }
 .actions { margin-top: 32px; }
-.actions a { min-height: 48px; display: inline-flex; align-items: center; padding: 0 24px; border-radius: 28px; background: #1a6778; color: white; text-decoration: none; font-size: 15px; font-weight: 700; }
-.postcard { padding: 32px; background: #d9eff1; border-radius: 28px; }
-.postcard > span { font-size: 12px; font-weight: 700; color: #235461; }
+.actions a { min-height: 48px; display: inline-flex; align-items: center; padding: 0 24px; border-radius: 28px; background: var(--travel-accent); color: var(--travel-accent-ink); text-decoration: none; font-size: 15px; font-weight: 700; }
+.postcard { padding: 32px; background: var(--travel-city); border-radius: 28px; }
+.postcard > span { font-size: 12px; font-weight: 700; color: var(--travel-city-ink); }
 .postcard img { display: block; margin: 28px 0; }
 .postcard h2 { font: 800 34px/1.15 "Trebuchet MS",Arial,sans-serif; margin: 12px 0; letter-spacing: -.04em; }
-.postcard p { color: #3e6670; font-size: 14px; }
-.postcard a { min-height: 44px; display: inline-flex; align-items: center; color: #1a6778; font-size: 14px; text-underline-offset: 4px; }
-.landing footer { grid-column: 1/-1; border-top: 1px solid #d7e4e9; padding-top: 20px; }
-.landing footer a { color: #1a6778; display: inline-flex; min-height: 44px; align-items: center; }
+.postcard p { color: var(--travel-city-muted); font-size: 14px; }
+.postcard a { min-height: 44px; display: inline-flex; align-items: center; color: var(--travel-accent); font-size: 14px; text-underline-offset: 4px; }
+.landing footer { grid-column: 1/-1; border-top: 1px solid var(--travel-line); padding-top: 20px; }
+.landing footer a { color: var(--travel-accent); display: inline-flex; min-height: 44px; align-items: center; }
 .landing a:focus-visible { outline: 3px solid #bd5a2a; outline-offset: 4px; }
 @media(max-width:760px) { .landing { grid-template-columns: 1fr; margin: 38px auto; gap: 30px; } .postcard { padding: 24px; } .landing h1 { font-size: clamp(40px,10vw,60px); } }

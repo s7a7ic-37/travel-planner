@@ -1,0 +1,22 @@
+:root {
+  --travel-bg: #f4f9fb; --travel-surface: #fff; --travel-ink: #24354a; --travel-muted: #526474;
+  --travel-accent: #1a6778; --travel-accent-ink: #fff; --travel-accent-hover: #125361;
+  --travel-line: #d7e4e9; --travel-field-line: #bdcfd6; --travel-field: #f7fafc; --travel-soft: #e7f1f5;
+  --travel-city: #d9eff1; --travel-city-ink: #235461; --travel-city-muted: #3e6670; --travel-city-line: #b0d3d8;
+  --travel-hover: #e0f0f3; --travel-day-head: #edf5f7;
+  --travel-culture-bg: #f9e8da; --travel-culture-ink: #804522;
+  --travel-museum-bg: #e9e7fa; --travel-museum-ink: #544486;
+  --travel-outdoor-bg: #e1f0e5; --travel-outdoor-ink: #326247;
+}
+html[data-theme="dark"] {
+  --travel-bg: #10212c; --travel-surface: #172f3b; --travel-ink: #e4f1f6; --travel-muted: #b2c7d3;
+  --travel-accent: #8ad4df; --travel-accent-ink: #10212c; --travel-accent-hover: #abe5ee;
+  --travel-line: #34515e; --travel-field-line: #577786; --travel-field: #102834; --travel-soft: #1b3946;
+  --travel-city: #214855; --travel-city-ink: #c1e5ec; --travel-city-muted: #b1d3dc; --travel-city-line: #477580;
+  --travel-hover: #28515e; --travel-day-head: #193b48;
+  --travel-culture-bg: #4d3528; --travel-culture-ink: #ffd0ad;
+  --travel-museum-bg: #363252; --travel-museum-ink: #d8c9ff;
+  --travel-outdoor-bg: #234837; --travel-outdoor-ink: #b4e4c4;
+}
+html[data-theme] body { background: var(--travel-bg); color: var(--travel-ink); }
+@media print { html[data-theme] body { background: white; color: black; } }

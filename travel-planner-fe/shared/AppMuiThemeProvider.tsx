@@ -1,5 +1,5 @@
 "use client";
-import { forwardRef, useMemo } from "react";
+import { forwardRef, useEffect, useMemo, useState } from "react";
 import createTheme from "@mui/material/styles/createTheme";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -11,14 +11,21 @@ const LinkBehaviour = forwardRef(function LinkBehaviour(props, ref) {
 });
 
 export default function AppMuiThemeProvider(props: { children: React.ReactNode }) {
+  const [night, setNight] = useState(false);
+  useEffect(() => {
+    const update = () => setNight(document.documentElement.dataset.theme === "dark");
+    update();
+    window.addEventListener("themechange", update);
+    return () => window.removeEventListener("themechange", update);
+  }, []);
   const theme = useMemo(() => createTheme({
     palette: {
-      mode: "light",
-      primary: { main: "#1a6778", contrastText: "#ffffff" },
-      secondary: { main: "#24354a" },
-      background: { paper: "#ffffff", default: "#f4f9fb" },
-      text: { primary: "#24354a", secondary: "#5e6978" },
-      divider: "#ddd6c8",
+      mode: night ? "dark" : "light",
+      primary: { main: night ? "#8ad4df" : "#1a6778", contrastText: night ? "#10212c" : "#ffffff" },
+      secondary: { main: night ? "#e4f1f6" : "#24354a" },
+      background: { paper: night ? "#172f3b" : "#ffffff", default: night ? "#10212c" : "#f4f9fb" },
+      text: { primary: night ? "#e4f1f6" : "#24354a", secondary: night ? "#b2c7d3" : "#5e6978" },
+      divider: night ? "#34515e" : "#d7e4e9",
     },
     typography: { fontFamily: '"Trebuchet MS", Arial, sans-serif' },
     shape: { borderRadius: 10 },
@@ -29,8 +36,8 @@ export default function AppMuiThemeProvider(props: { children: React.ReactNode }
       } },
       MuiButtonBase: { defaultProps: { LinkComponent: LinkBehaviour } },
       MuiButton: { styleOverrides: { root: { minHeight: 44, textTransform: "none", fontWeight: 650 } } },
-      MuiCssBaseline: { styleOverrides: { html: { colorScheme: "light" }, body: { backgroundColor: "#f4f9fb" } } },
+      MuiCssBaseline: { styleOverrides: { html: { colorScheme: night ? "dark" : "light" } } },
     },
-  }), []);
+  }), [night]);
   return <ThemeProvider theme={theme}><CssBaseline /><div id="app-container">{props.children}</div></ThemeProvider>;
 }

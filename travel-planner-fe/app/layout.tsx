@@ -1,3 +1,4 @@
+import "./theme.css";
 import { AuthContextProvider } from "./context/AuthContext";
 import { Suspense } from "react";
 import Container from "@/components/appcontainer";
@@ -24,7 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head><script src="/theme.js" /></head>
       <body
         style={{
           margin: 0,
