@@ -6,6 +6,9 @@ import BookmarkBorder from "@mui/icons-material/BookmarkBorder";
 import PrintOutlined from "@mui/icons-material/PrintOutlined";
 import {
   createPlan,
+  cityGuides,
+  cityPlaces,
+  destinations,
   interests,
   moveStop,
   places,
@@ -13,6 +16,7 @@ import {
   exportPlan,
   importPlanFile,
   type Interest,
+  type City,
   type Plan,
 } from "@/lib/demo";
 import styles from "./page.module.css";
@@ -21,6 +25,7 @@ const STORAGE_KEY = "travel-planner-personal-demo-v1";
 
 export default function DemoPlanner() {
   const [days, setDays] = useState(2);
+  const [city, setCity] = useState<City>("Manchester");
   const [preferences, setPreferences] = useState<Interest[]>([]);
   const [plan, setPlan] = useState<Plan | null>(null);
   const [message, setMessage] = useState("");
@@ -41,10 +46,10 @@ export default function DemoPlanner() {
   function generate(event: React.FormEvent) {
     event.preventDefault();
     try {
-      let next = createPlan(days, preferences, variation.current);
+      let next = createPlan(days, preferences, variation.current, city);
       variation.current += 1;
       if (plan && next.stops.every((stop, index) => stop.id === plan.stops[index]?.id)) {
-        next = createPlan(days, preferences, variation.current);
+        next = createPlan(days, preferences, variation.current, city);
         variation.current += 1;
       }
       setPlan(next);
@@ -72,6 +77,7 @@ export default function DemoPlanner() {
       const loaded = restorePlan(localStorage.getItem(STORAGE_KEY) || "");
       setPlan(loaded);
       setDays(loaded.days);
+      setCity(loaded.city);
       setPreferences(loaded.preferences);
       setMessage("Saved itinerary loaded.");
     } catch {
@@ -96,7 +102,7 @@ export default function DemoPlanner() {
     const url = URL.createObjectURL(new Blob([exportPlan(plan)], { type: "application/json" }));
     const link = document.createElement("a");
     link.href = url;
-    link.download = "manchester-sample-plan.json";
+    link.download = `${plan.city.toLowerCase()}-sample-plan.json`;
     link.click();
     URL.revokeObjectURL(url);
     setMessage("Downloaded your sample plan. Import it in another browser to continue.");
@@ -110,6 +116,7 @@ export default function DemoPlanner() {
       const imported = await importPlanFile(file);
       setPlan(imported);
       setDays(imported.days);
+      setCity(imported.city);
       setPreferences(imported.preferences);
       setMessage("Imported the sample plan. Your saved browser copy is unchanged until you save.");
     } catch {
@@ -123,11 +130,11 @@ export default function DemoPlanner() {
     <main className={styles.demo}>
       <div className={styles.hero}>
       <div className={styles.heading}>
-        <h1>Your Manchester.<br /><span>Your way.</span></h1>
+        <h1>Your {city}.<br /><span>Your way.</span></h1>
         <div className={styles.heroActions}><a className={styles.startLink} href="#plan-controls">Plan a city day <span aria-hidden="true">↗</span></a></div>
       </div>
-      <aside className={styles.cityCard} aria-label="Manchester">
-        <div className={styles.cityLabel}><span>Manchester</span><span>UK ↗</span></div>
+      <aside className={styles.cityCard} aria-label={city}>
+        <div className={styles.cityLabel}><span>{city}</span><span>UK ↗</span></div>
         <svg viewBox="0 0 340 150" role="img" aria-label="Abstract city skyline illustration, not a map">
           <path d="M12 132H328M35 132V68H72V132M81 132V91H119V132M134 132V51H172V132M183 132V78H214V132M230 132V36H265V132M278 132V93H311V132" fill="none" stroke="currentColor" strokeWidth="2" />
           <path d="M142 51V38H165V51M150 38V17M237 36V25H258V36" fill="none" stroke="currentColor" strokeWidth="2" />
@@ -135,15 +142,19 @@ export default function DemoPlanner() {
           <circle cx="294" cy="32" r="15" fill="#e9b78e" /><path d="M16 146C75 120 112 150 169 140S277 143 329 146" fill="none" stroke="#b5482b" strokeWidth="3" />
         </svg>
         <h2>A little city escape.</h2>
-        <div className={styles.cityStats}><span><b>01—03</b>days</span><span><b>{places.length}</b>places</span><span><b>YOUR</b>order</span></div>
+        <div className={styles.cityStats}><span><b>01—03</b>days</span><span><b>{cityPlaces[city].length}</b>places</span><span><b>YOUR</b>order</span></div>
       </aside>
       </div>
       <div className={styles.layout}>
         <form id="plan-controls" className={styles.controls} onSubmit={generate}>
           <h2>Make a plan</h2>
           <label htmlFor="destination">Destination</label>
-          <select id="destination">
-            <option>Manchester, UK</option>
+          <select id="destination" value={city} onChange={(event) => {
+            setCity(event.target.value as City);
+            setPlan(null);
+            variation.current = 0;
+          }}>
+            {destinations.map((destination) => <option key={destination} value={destination}>{destination}, UK</option>)}
           </select>
           <label htmlFor="days">How many days?</label>
           <input
@@ -209,7 +220,7 @@ export default function DemoPlanner() {
               <div className={styles.planHeading}>
                 <div>
                   <p className={styles.eyebrow}>
-                    MANCHESTER / {plan.days} {plan.days === 1 ? "DAY" : "DAYS"}
+                    {plan.city.toUpperCase()} / {plan.days} {plan.days === 1 ? "DAY" : "DAYS"}
                   </p>
                   <h2>Your itinerary</h2>
                 </div>
@@ -242,7 +253,7 @@ export default function DemoPlanner() {
                               <h4>{stop.name}</h4>
                               <p>{stop.note}</p>
                               <a
-                                href={`https://www.openstreetmap.org/search?query=${encodeURIComponent(stop.name + ", Manchester")}`}
+                                href={`https://www.openstreetmap.org/search?query=${encodeURIComponent(stop.name + ", " + plan.city)}`}
                               >
                                 Find on OpenStreetMap ↗
                               </a>
@@ -288,7 +299,7 @@ export default function DemoPlanner() {
           </p>
         </section>
       </div>
-      <details className={styles.about}><summary>About the places</summary><p>A curated Manchester catalogue, not live search or route planning. Check opening times, travel, availability and accessibility before visiting.</p><a href="https://www.visitmanchester.com/things-to-see-and-do/">Manchester visitor directory ↗</a></details>
+      <details className={styles.about}><summary>About the places</summary><p>Curated sample places for five UK cities, not live search or route planning. Check opening times, travel, availability and accessibility before visiting.</p><a href={cityGuides[city]}>{city} visitor guide ↗</a></details>
       <p className={styles.links}>
         <a href="https://github.com/s7a7ic-37/travel-planner">
           Source ↗

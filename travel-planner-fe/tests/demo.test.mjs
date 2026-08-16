@@ -1,26 +1,38 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createPlan, moveStop, restorePlan, exportPlan, importPlanFile, places, interests } from "../lib/demo.ts";
+import { createPlan, moveStop, restorePlan, exportPlan, importPlanFile, places, cityPlaces, destinations, interests } from "../lib/demo.ts";
 
-test("alternative plans reach the full catalogue and remain portable", () => {
+test("alternative plans reach every city catalogue and remain portable", () => {
+  assert.equal(destinations.length, 5);
   assert.equal(places.length, 30);
-  assert.equal(new Set(places.map(place => place.id)).size, places.length);
-  const reached = new Set();
-  for (let variation = 0; variation < places.length; variation++) {
-    for (const preference of [[], ...interests.map(interest => [interest])]) {
-      const plan = createPlan(3, preference, variation);
-      assert.equal(new Set(plan.stops.map(stop => stop.id)).size, 6);
-      if (preference.length) assert.ok(plan.stops.every(stop => stop.category === preference[0]));
-      else plan.stops.forEach(stop => reached.add(stop.id));
-      const text = exportPlan(plan);
-      assert.ok(Buffer.byteLength(text) <= 6000);
-      assert.deepEqual(restorePlan(text), plan);
+  const allIds = destinations.flatMap(city => cityPlaces[city].map(place => place.id));
+  assert.equal(new Set(allIds).size, allIds.length);
+  for (const city of destinations) {
+    const catalogue = cityPlaces[city];
+    assert.ok(catalogue.length >= 12);
+    const reached = new Set();
+    for (let variation = 0; variation < catalogue.length; variation++) {
+      for (const preference of [[], ...interests.map(interest => [interest])]) {
+        const plan = createPlan(3, preference, variation, city);
+        assert.equal(plan.city, city);
+        assert.equal(new Set(plan.stops.map(stop => stop.id)).size, 6);
+        if (preference.length) {
+          const preferredCount = catalogue.filter(place => place.category === preference[0]).length;
+          assert.ok(plan.stops.slice(0, Math.min(6, preferredCount)).every(stop => stop.category === preference[0]));
+        }
+        else plan.stops.forEach(stop => reached.add(stop.id));
+        const text = exportPlan(plan);
+        assert.ok(Buffer.byteLength(text) <= 6000);
+        assert.deepEqual(restorePlan(text), plan);
+      }
     }
+    assert.equal(reached.size, catalogue.length);
+    assert.deepEqual(createPlan(2, [], catalogue.length, city), createPlan(2, [], 0, city));
   }
-  assert.equal(reached.size, places.length);
   assert.deepEqual(createPlan(2, [], places.length), createPlan(2, []));
   assert.throws(() => createPlan(2, [], -1));
   assert.throws(() => createPlan(2, [], 1.5));
+  assert.throws(() => createPlan(2, [], 0, "Paris"));
 });
 
 test("portable plans preserve the reordered itinerary and only use known place text", async () => {
@@ -69,4 +81,6 @@ test("saved data cannot inject unknown places, text or duplicate stops", () => {
   altered.stops = [original.stops[0], original.stops[0]];
   assert.throws(() => restorePlan(JSON.stringify(altered)));
   assert.throws(() => restorePlan("bad-json"));
+  altered.city = "London";
+  assert.throws(() => restorePlan(JSON.stringify(altered)));
 });

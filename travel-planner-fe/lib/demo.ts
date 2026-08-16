@@ -1,5 +1,7 @@
 export const interests = ["Museums", "Outdoors", "Culture"] as const;
 export type Interest = (typeof interests)[number];
+export const destinations = ["Manchester", "London", "Edinburgh", "Liverpool", "York"] as const;
+export type City = (typeof destinations)[number];
 export type Stop = {
   id: string;
   name: string;
@@ -7,13 +9,13 @@ export type Stop = {
   note: string;
 };
 export type Plan = {
-  city: "Manchester";
+  city: City;
   days: number;
   preferences: Interest[];
   stops: Stop[];
 };
 
-export const places: Stop[] = [
+const manchesterPlaces: Stop[] = [
   {
     id: "art",
     name: "Manchester Art Gallery",
@@ -77,24 +79,102 @@ export const places: Stop[] = [
   { id: "salford-quays", name: "Salford Quays", category: "Culture", note: "Explore the waterfront, media district and public spaces." },
 ];
 
-export function createPlan(days: number, preferences: Interest[], variation = 0): Plan {
+const londonPlaces: Stop[] = [
+  { id: "london-british-museum", name: "The British Museum", category: "Museums", note: "Explore collections spanning human history and cultures." },
+  { id: "london-natural-history", name: "Natural History Museum", category: "Museums", note: "Discover the natural world in South Kensington." },
+  { id: "london-tate-modern", name: "Tate Modern", category: "Museums", note: "See modern and contemporary art beside the Thames." },
+  { id: "london-v-and-a", name: "Victoria and Albert Museum", category: "Museums", note: "Explore art, design and performance collections." },
+  { id: "london-hyde-park", name: "Hyde Park", category: "Outdoors", note: "Walk the paths and lakeside spaces in central London." },
+  { id: "london-greenwich-park", name: "Greenwich Park", category: "Outdoors", note: "Explore historic parkland and hilltop city views." },
+  { id: "london-regents-park", name: "The Regent's Park", category: "Outdoors", note: "Find gardens, open lawns and walking paths." },
+  { id: "london-south-bank", name: "South Bank", category: "Outdoors", note: "Walk the riverside route between landmark bridges." },
+  { id: "london-tower", name: "Tower of London", category: "Culture", note: "Visit the historic fortress on the Thames." },
+  { id: "london-tower-bridge", name: "Tower Bridge", category: "Culture", note: "See the landmark bridge and its river crossings." },
+  { id: "london-st-pauls", name: "St Paul's Cathedral", category: "Culture", note: "Explore the cathedral and its place in the city." },
+  { id: "london-globe", name: "Shakespeare's Globe", category: "Culture", note: "Discover theatre on the Bankside riverfront." },
+];
+
+const edinburghPlaces: Stop[] = [
+  { id: "edinburgh-national-museum", name: "National Museum of Scotland", category: "Museums", note: "Explore Scotland's history, people and natural world." },
+  { id: "edinburgh-national-gallery", name: "Scottish National Gallery", category: "Museums", note: "See art collections on the Mound." },
+  { id: "edinburgh-surgeons-hall", name: "Surgeons' Hall Museums", category: "Museums", note: "Discover the history of medicine and surgery." },
+  { id: "edinburgh-writers", name: "Writers' Museum", category: "Museums", note: "Learn about Robert Burns, Walter Scott and Robert Louis Stevenson." },
+  { id: "edinburgh-holyrood", name: "Holyrood Park", category: "Outdoors", note: "Walk the open landscape beneath Arthur's Seat." },
+  { id: "edinburgh-botanic", name: "Royal Botanic Garden Edinburgh", category: "Outdoors", note: "Explore gardens and glasshouses north of the centre." },
+  { id: "edinburgh-calton", name: "Calton Hill", category: "Outdoors", note: "Take in city views among historic monuments." },
+  { id: "edinburgh-dean", name: "Dean Village and Water of Leith", category: "Outdoors", note: "Follow the riverside path through the historic village." },
+  { id: "edinburgh-castle", name: "Edinburgh Castle", category: "Culture", note: "Visit the landmark above the Old Town." },
+  { id: "edinburgh-royal-mile", name: "The Royal Mile", category: "Culture", note: "Explore the historic route through the Old Town." },
+  { id: "edinburgh-holyroodhouse", name: "Palace of Holyroodhouse", category: "Culture", note: "See the royal residence at the end of the Royal Mile." },
+  { id: "edinburgh-scott-monument", name: "Scott Monument", category: "Culture", note: "Find the Gothic monument in Princes Street Gardens." },
+];
+
+const liverpoolPlaces: Stop[] = [
+  { id: "liverpool-museum", name: "Museum of Liverpool", category: "Museums", note: "Explore the city's history and communities on the waterfront." },
+  { id: "liverpool-maritime", name: "Merseyside Maritime Museum", category: "Museums", note: "Discover the port city's maritime stories." },
+  { id: "liverpool-world-museum", name: "World Museum", category: "Museums", note: "Explore collections from natural history to world cultures." },
+  { id: "liverpool-tate", name: "Tate Liverpool + RIBA North", category: "Museums", note: "Find art and architecture exhibitions at the waterfront." },
+  { id: "liverpool-sefton", name: "Sefton Park", category: "Outdoors", note: "Walk the paths around the lake and Palm House." },
+  { id: "liverpool-crosby", name: "Crosby Beach", category: "Outdoors", note: "Walk the shoreline and see Antony Gormley's installation." },
+  { id: "liverpool-everton", name: "Everton Park", category: "Outdoors", note: "Explore open parkland with views across the city." },
+  { id: "liverpool-clarkes", name: "Clarke Gardens", category: "Outdoors", note: "Take a quiet garden walk in the city's south." },
+  { id: "liverpool-albert", name: "Royal Albert Dock", category: "Culture", note: "Explore the dockside warehouses, galleries and public spaces." },
+  { id: "liverpool-cathedral", name: "Liverpool Cathedral", category: "Culture", note: "Visit the cathedral overlooking the city." },
+  { id: "liverpool-philharmonic", name: "Liverpool Philharmonic Hall", category: "Culture", note: "See the landmark concert hall and its programme." },
+  { id: "liverpool-bold-street", name: "Bold Street", category: "Culture", note: "Explore independent shops and cafés in the city centre." },
+];
+
+const yorkPlaces: Stop[] = [
+  { id: "york-railway", name: "National Railway Museum", category: "Museums", note: "Explore railway engineering and Britain's rail history." },
+  { id: "york-castle-museum", name: "York Castle Museum", category: "Museums", note: "Discover everyday life and local history." },
+  { id: "york-jorgvik", name: "JORVIK Viking Centre", category: "Museums", note: "Explore York's Viking-age archaeology and stories." },
+  { id: "york-art-gallery", name: "York Art Gallery", category: "Museums", note: "See paintings, ceramics and changing exhibitions." },
+  { id: "york-museum-gardens", name: "York Museum Gardens", category: "Outdoors", note: "Walk among historic ruins and planted gardens." },
+  { id: "york-rowntree", name: "Rowntree Park", category: "Outdoors", note: "Enjoy riverside paths and open green space." },
+  { id: "york-homestead", name: "Homestead Park", category: "Outdoors", note: "Explore landscaped gardens and woodland paths." },
+  { id: "york-river", name: "River Ouse Walk", category: "Outdoors", note: "Follow the riverside paths through the city." },
+  { id: "york-minster", name: "York Minster", category: "Culture", note: "Visit the cathedral at the heart of the city." },
+  { id: "york-shambles", name: "The Shambles", category: "Culture", note: "Walk one of York's best-known medieval streets." },
+  { id: "york-city-walls", name: "York City Walls", category: "Culture", note: "Walk the historic walls around the centre." },
+  { id: "york-clifford", name: "Clifford's Tower", category: "Culture", note: "See the castle keep above the city centre." },
+];
+
+export const cityPlaces: Record<City, Stop[]> = {
+  Manchester: manchesterPlaces,
+  London: londonPlaces,
+  Edinburgh: edinburghPlaces,
+  Liverpool: liverpoolPlaces,
+  York: yorkPlaces,
+};
+export const cityGuides: Record<City, string> = {
+  Manchester: "https://www.visitmanchester.com/things-to-see-and-do/",
+  London: "https://www.visitlondon.com/things-to-do",
+  Edinburgh: "https://www.visitscotland.com/places-to-go/edinburgh/things-to-do",
+  Liverpool: "https://www.visitliverpool.com/things-to-do/",
+  York: "https://www.visityork.org/things-to-do",
+};
+export const places = cityPlaces.Manchester;
+
+export function createPlan(days: number, preferences: Interest[], variation = 0, city: City = "Manchester"): Plan {
   if (
     !Number.isInteger(days) ||
     days < 1 ||
     days > 3 ||
     !Number.isSafeInteger(variation) || variation < 0 ||
-    preferences.some((value) => !interests.includes(value))
+    preferences.some((value) => !interests.includes(value)) ||
+    !destinations.includes(city)
   ) {
     throw new Error("Choose one to three whole days and supported interests.");
   }
   const unique = [...new Set(preferences)];
-  const offset = variation % places.length;
-  const ranked = [...places.slice(offset), ...places.slice(0, offset)].sort(
+  const catalogue = cityPlaces[city];
+  const offset = variation % catalogue.length;
+  const ranked = [...catalogue.slice(offset), ...catalogue.slice(0, offset)].sort(
     (a, b) =>
       Number(unique.includes(b.category)) - Number(unique.includes(a.category)),
   );
   return {
-    city: "Manchester",
+    city,
     days,
     preferences: unique,
     stops: ranked.slice(0, days * 2),
@@ -105,24 +185,24 @@ export function restorePlan(text: string): Plan {
   if (text.length > 6000) throw new Error("Saved plan is too large.");
   const raw = JSON.parse(text);
   if (
-    raw?.city !== "Manchester" ||
+    !destinations.includes(raw?.city) ||
     !Array.isArray(raw.preferences) ||
     !Array.isArray(raw.stops)
   ) {
     throw new Error("Unrecognized saved plan.");
   }
-  const plan = createPlan(raw.days, raw.preferences);
+  const plan = createPlan(raw.days, raw.preferences, 0, raw.city);
   const ids = raw.stops.map((stop: { id?: unknown }) => stop?.id);
   if (
     ids.length !== plan.days * 2 ||
     new Set(ids).size !== ids.length ||
-    ids.some((id: unknown) => !places.some((place) => place.id === id))
+    ids.some((id: unknown) => !cityPlaces[plan.city].some((place) => place.id === id))
   ) {
     throw new Error("Saved stops are invalid.");
   }
   return {
     ...plan,
-    stops: ids.map((id: string) => places.find((place) => place.id === id)!),
+    stops: ids.map((id: string) => cityPlaces[plan.city].find((place) => place.id === id)!),
   };
 }
 
