@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { createPlan, moveStop, restorePlan, exportPlan, importPlanFile, places, interests } from "../lib/demo.ts";
 
 test("alternative plans reach the full catalogue and remain portable", () => {
-  assert.equal(places.length, 18);
+  assert.equal(places.length, 30);
   assert.equal(new Set(places.map(place => place.id)).size, places.length);
   const reached = new Set();
   for (let variation = 0; variation < places.length; variation++) {

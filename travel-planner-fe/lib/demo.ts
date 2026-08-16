@@ -63,6 +63,18 @@ export const places: Stop[] = [
   { id: "manchester-museum", name: "Manchester Museum", category: "Museums", note: "Natural history and cultural collections on Oxford Road." },
   { id: "fletcher-moss", name: "Fletcher Moss Botanical Garden", category: "Outdoors", note: "Gardens and woodland paths in Didsbury." },
   { id: "castlefield-gallery", name: "Castlefield Gallery", category: "Culture", note: "Contemporary visual art near the canal district." },
+  { id: "imperial-war-museum-north", name: "Imperial War Museum North", category: "Museums", note: "Explore how conflict has shaped people's lives." },
+  { id: "jewish-museum", name: "Manchester Jewish Museum", category: "Museums", note: "Discover Manchester's Jewish history and community." },
+  { id: "transport-museum", name: "Museum of Transport Greater Manchester", category: "Museums", note: "See the vehicles and stories behind local transport." },
+  { id: "salford-museum", name: "Salford Museum and Art Gallery", category: "Museums", note: "Local history and art in Peel Park." },
+  { id: "sale-water-park", name: "Sale Water Park", category: "Outdoors", note: "Lakeside paths and open space in south Manchester." },
+  { id: "alexandra-park", name: "Alexandra Park", category: "Outdoors", note: "A Victorian park with tree-lined paths and gardens." },
+  { id: "rhs-bridgewater", name: "RHS Garden Bridgewater", category: "Outdoors", note: "Explore landscaped gardens in Worsley." },
+  { id: "peel-park", name: "Peel Park", category: "Outdoors", note: "Riverside paths beside Salford Museum and Art Gallery." },
+  { id: "central-library", name: "Manchester Central Library", category: "Culture", note: "Visit the landmark library at St Peter's Square." },
+  { id: "royal-exchange", name: "Royal Exchange Theatre", category: "Culture", note: "A theatre in the centre's historic Cotton Exchange." },
+  { id: "aviva-studios", name: "Aviva Studios", category: "Culture", note: "A venue for arts, music and live performance." },
+  { id: "salford-quays", name: "Salford Quays", category: "Culture", note: "Explore the waterfront, media district and public spaces." },
 ];
 
 export function createPlan(days: number, preferences: Interest[], variation = 0): Plan {

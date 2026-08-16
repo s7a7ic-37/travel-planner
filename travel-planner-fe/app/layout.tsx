@@ -5,11 +5,12 @@ import Container from "@/components/appcontainer";
 import Navbar from "@/components/navbar";
 import { NextAppDirEmotionCacheProvider } from "tss-react/next/appDir";
 import AppMuiThemeProvider from "@/shared/AppMuiThemeProvider";
+import { places } from "@/lib/demo";
 
 export const metadata = {
   title: "Ready, Jet Set, Go! · Manchester planner",
   description:
-    "Plan a Manchester city break, explore 18 places and save your itinerary.",
+    `Plan a Manchester city break, explore ${places.length} places and save your itinerary.`,
   icons: {
     icon: [
       { url: "/favicon-32.png?v=20261031", type: "image/png", sizes: "32x32" },

@@ -6,7 +6,7 @@ A city itinerary planner built with Next.js, React, TypeScript and Material UI.
 
 ## Plan a city day
 
-The guest demo uses 18 curated places in Manchester:
+The guest demo uses 30 curated places across Manchester and nearby Greater Manchester:
 
 - Choose one to three days and prioritize museums, outdoors or culture.
 - Generate two stops per day and change their order.
