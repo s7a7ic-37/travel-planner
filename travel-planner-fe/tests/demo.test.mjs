@@ -1,15 +1,16 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createPlan, moveStop, restorePlan, exportPlan, importPlanFile, places, cityPlaces, destinations, interests } from "../lib/demo.ts";
+import { createPlan, moveStop, restorePlan, exportPlan, importPlanFile, places, cityPlaces, destinations, interests, readRecentItineraries, rememberItinerary } from "../lib/demo.ts";
 
 test("alternative plans reach every city catalogue and remain portable", () => {
   assert.equal(destinations.length, 5);
-  assert.equal(places.length, 30);
+  assert.equal(places.length, 34);
   const allIds = destinations.flatMap(city => cityPlaces[city].map(place => place.id));
   assert.equal(new Set(allIds).size, allIds.length);
   for (const city of destinations) {
     const catalogue = cityPlaces[city];
     assert.ok(catalogue.length >= 12);
+    assert.ok(interests.every(interest => catalogue.some(place => place.category === interest)));
     const reached = new Set();
     for (let variation = 0; variation < catalogue.length; variation++) {
       for (const preference of [[], ...interests.map(interest => [interest])]) {
@@ -27,6 +28,9 @@ test("alternative plans reach every city catalogue and remain portable", () => {
       }
     }
     assert.equal(reached.size, catalogue.length);
+    const week = createPlan(7, [], 0, city);
+    assert.equal(week.stops.length, 14);
+    assert.equal(new Set(week.stops.map(stop => stop.id)).size, 14);
     assert.deepEqual(createPlan(2, [], catalogue.length, city), createPlan(2, [], 0, city));
   }
   assert.deepEqual(createPlan(2, [], places.length), createPlan(2, []));
@@ -57,7 +61,7 @@ test("plans have two unique stops per day, with preferred categories first", () 
   assert.equal(plan.stops[0].category, "Outdoors");
   assert.equal(plan.stops[1].category, "Outdoors");
   assert.throws(() => createPlan(1.5, []));
-  assert.throws(() => createPlan(4, []));
+  assert.throws(() => createPlan(8, []));
   assert.throws(() => createPlan(1, ["Unknown"]));
 });
 test("reordering preserves the original and persists safely", () => {
@@ -83,4 +87,18 @@ test("saved data cannot inject unknown places, text or duplicate stops", () => {
   assert.throws(() => restorePlan("bad-json"));
   altered.city = "London";
   assert.throws(() => restorePlan(JSON.stringify(altered)));
+});
+
+test("recent itineraries are validated, newest-first and limited to five", () => {
+  let history = [];
+  for (let i = 0; i < 7; i++) {
+    history = rememberItinerary(history, createPlan(2, [], i, destinations[i % destinations.length]), 1000 + i);
+  }
+  assert.equal(history.length, 5);
+  assert.equal(history[0].createdAt, 1006);
+  assert.deepEqual(readRecentItineraries(JSON.stringify(history)), history);
+  const invalid = structuredClone(history);
+  invalid[0].plan.city = "Paris";
+  assert.equal(readRecentItineraries(JSON.stringify(invalid)).length, 4);
+  assert.deepEqual(readRecentItineraries("x".repeat(30001)), []);
 });

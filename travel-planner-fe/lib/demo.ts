@@ -1,4 +1,4 @@
-export const interests = ["Museums", "Outdoors", "Culture"] as const;
+export const interests = ["Museums", "Outdoors", "Culture", "Food & drink", "Architecture", "Music & nightlife", "Family"] as const;
 export type Interest = (typeof interests)[number];
 export const destinations = ["Manchester", "London", "Edinburgh", "Liverpool", "York"] as const;
 export type City = (typeof destinations)[number];
@@ -77,6 +77,10 @@ const manchesterPlaces: Stop[] = [
   { id: "royal-exchange", name: "Royal Exchange Theatre", category: "Culture", note: "A theatre in the centre's historic Cotton Exchange." },
   { id: "aviva-studios", name: "Aviva Studios", category: "Culture", note: "A venue for arts, music and live performance." },
   { id: "salford-quays", name: "Salford Quays", category: "Culture", note: "Explore the waterfront, media district and public spaces." },
+  { id: "mackie-mayor", name: "Mackie Mayor", category: "Food & drink", note: "Browse the independent food hall in a restored market building." },
+  { id: "victoria-baths", name: "Victoria Baths", category: "Architecture", note: "See the landmark Edwardian swimming baths and tiled interiors." },
+  { id: "band-on-the-wall", name: "Band on the Wall", category: "Music & nightlife", note: "Find live music at the historic Northern Quarter venue." },
+  { id: "legoland-discovery", name: "LEGOLAND Discovery Centre", category: "Family", note: "An indoor LEGO attraction at Trafford Palazzo." },
 ];
 
 const londonPlaces: Stop[] = [
@@ -92,6 +96,10 @@ const londonPlaces: Stop[] = [
   { id: "london-tower-bridge", name: "Tower Bridge", category: "Culture", note: "See the landmark bridge and its river crossings." },
   { id: "london-st-pauls", name: "St Paul's Cathedral", category: "Culture", note: "Explore the cathedral and its place in the city." },
   { id: "london-globe", name: "Shakespeare's Globe", category: "Culture", note: "Discover theatre on the Bankside riverfront." },
+  { id: "london-borough-market", name: "Borough Market", category: "Food & drink", note: "Explore the historic market's food stalls and produce." },
+  { id: "london-barbican", name: "Barbican Centre", category: "Architecture", note: "See the arts centre's distinctive post-war architecture." },
+  { id: "london-royal-albert-hall", name: "Royal Albert Hall", category: "Music & nightlife", note: "Visit the landmark concert hall and check its live programme." },
+  { id: "london-zoo", name: "ZSL London Zoo", category: "Family", note: "Explore the animal habitats in Regent's Park." },
 ];
 
 const edinburghPlaces: Stop[] = [
@@ -107,6 +115,10 @@ const edinburghPlaces: Stop[] = [
   { id: "edinburgh-royal-mile", name: "The Royal Mile", category: "Culture", note: "Explore the historic route through the Old Town." },
   { id: "edinburgh-holyroodhouse", name: "Palace of Holyroodhouse", category: "Culture", note: "See the royal residence at the end of the Royal Mile." },
   { id: "edinburgh-scott-monument", name: "Scott Monument", category: "Culture", note: "Find the Gothic monument in Princes Street Gardens." },
+  { id: "edinburgh-stockbridge", name: "Stockbridge Market", category: "Food & drink", note: "Browse the Sunday market's independent food and craft stalls." },
+  { id: "edinburgh-parliament", name: "Scottish Parliament Building", category: "Architecture", note: "See the contemporary building at the foot of Arthur's Seat." },
+  { id: "edinburgh-usher-hall", name: "Usher Hall", category: "Music & nightlife", note: "Visit the concert hall and check its performance listings." },
+  { id: "edinburgh-camera-obscura", name: "Camera Obscura and World of Illusions", category: "Family", note: "Explore interactive optical illusions near the Castle." },
 ];
 
 const liverpoolPlaces: Stop[] = [
@@ -122,6 +134,10 @@ const liverpoolPlaces: Stop[] = [
   { id: "liverpool-cathedral", name: "Liverpool Cathedral", category: "Culture", note: "Visit the cathedral overlooking the city." },
   { id: "liverpool-philharmonic", name: "Liverpool Philharmonic Hall", category: "Culture", note: "See the landmark concert hall and its programme." },
   { id: "liverpool-bold-street", name: "Bold Street", category: "Culture", note: "Explore independent shops and cafés in the city centre." },
+  { id: "liverpool-baltic-market", name: "Baltic Market", category: "Food & drink", note: "Find independent street food in the Baltic Triangle." },
+  { id: "liverpool-st-georges-hall", name: "St George's Hall", category: "Architecture", note: "Explore the neoclassical landmark and its public spaces." },
+  { id: "liverpool-cavern-club", name: "The Cavern Club", category: "Music & nightlife", note: "See the Mathew Street live-music venue." },
+  { id: "liverpool-eureka", name: "Eureka! Science + Discovery", category: "Family", note: "Explore interactive science exhibits at Seacombe waterfront." },
 ];
 
 const yorkPlaces: Stop[] = [
@@ -137,6 +153,10 @@ const yorkPlaces: Stop[] = [
   { id: "york-shambles", name: "The Shambles", category: "Culture", note: "Walk one of York's best-known medieval streets." },
   { id: "york-city-walls", name: "York City Walls", category: "Culture", note: "Walk the historic walls around the centre." },
   { id: "york-clifford", name: "Clifford's Tower", category: "Culture", note: "See the castle keep above the city centre." },
+  { id: "york-shambles-market", name: "Shambles Market", category: "Food & drink", note: "Browse the daily market stalls in the city centre." },
+  { id: "york-merchants-hall", name: "Merchant Adventurers' Hall", category: "Architecture", note: "Visit the medieval timber-framed guildhall." },
+  { id: "york-crescent", name: "The Crescent", category: "Music & nightlife", note: "Catch live music and events at this independent venue." },
+  { id: "york-dig", name: "DIG: An Archaeological Adventure", category: "Family", note: "Explore hands-on archaeology in the city centre." },
 ];
 
 export const cityPlaces: Record<City, Stop[]> = {
@@ -155,16 +175,38 @@ export const cityGuides: Record<City, string> = {
 };
 export const places = cityPlaces.Manchester;
 
+export type RecentItinerary = { id: string; createdAt: number; plan: Plan };
+export const HISTORY_KEY = "travel-planner-recent-v1";
+export function readRecentItineraries(text: string | null): RecentItinerary[] {
+  if (!text || text.length > 30000) return [];
+  try {
+    const rows = JSON.parse(text);
+    if (!Array.isArray(rows)) return [];
+    return rows.slice(0, 5).flatMap((row) => {
+      if (typeof row?.id !== "string" || !Number.isSafeInteger(row.createdAt) || !Number.isFinite(new Date(row.createdAt).getTime())) return [];
+      try {
+        return [{ id: row.id, createdAt: row.createdAt, plan: restorePlan(JSON.stringify(row.plan)) }];
+      } catch { return []; }
+    });
+  } catch { return []; }
+}
+export function rememberItinerary(history: RecentItinerary[], plan: Plan, createdAt = Date.now()): RecentItinerary[] {
+  const safePlan = restorePlan(JSON.stringify(plan));
+  let id = `${createdAt}-${safePlan.city}-${safePlan.stops.map((stop) => stop.id).join("-")}`;
+  while (history.some((item) => item.id === id)) id += "-1";
+  return [{ id, createdAt, plan: safePlan }, ...history].slice(0, 5);
+}
+
 export function createPlan(days: number, preferences: Interest[], variation = 0, city: City = "Manchester"): Plan {
   if (
     !Number.isInteger(days) ||
     days < 1 ||
-    days > 3 ||
+    days > 7 ||
     !Number.isSafeInteger(variation) || variation < 0 ||
     preferences.some((value) => !interests.includes(value)) ||
     !destinations.includes(city)
   ) {
-    throw new Error("Choose one to three whole days and supported interests.");
+    throw new Error("Choose one to seven whole days and supported interests.");
   }
   const unique = [...new Set(preferences)];
   const catalogue = cityPlaces[city];

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import DownloadOutlined from "@mui/icons-material/DownloadOutlined";
 import BookmarkBorder from "@mui/icons-material/BookmarkBorder";
 import PrintOutlined from "@mui/icons-material/PrintOutlined";
@@ -11,7 +12,6 @@ import {
   destinations,
   interests,
   moveStop,
-  places,
   restorePlan,
   exportPlan,
   importPlanFile,
@@ -19,6 +19,7 @@ import {
   type City,
   type Plan,
 } from "@/lib/demo";
+import { addRecentItinerary, useRecentItineraries } from "@/hooks/useRecentItineraries";
 import styles from "./page.module.css";
 
 const STORAGE_KEY = "travel-planner-personal-demo-v1";
@@ -32,6 +33,12 @@ export default function DemoPlanner() {
   const [saved, setSaved] = useState(false);
   const itineraryRef = useRef<HTMLElement>(null);
   const variation = useRef(0);
+  const recent = useRecentItineraries();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const newPlanRequest = searchParams.get("new");
+  const historyRequest = searchParams.get("history");
+  const activePlan = plan?.city === city ? plan : null;
 
   useEffect(() => {
     try {
@@ -43,6 +50,28 @@ export default function DemoPlanner() {
     }
   }, []);
 
+  useEffect(() => {
+    if (newPlanRequest !== null) {
+      setPlan(null);
+      setCity("Manchester");
+      setDays(2);
+      setPreferences([]);
+      variation.current = 0;
+      setMessage("Choose a city and interests to start a new itinerary.");
+      router.replace("/demo/#plan-controls");
+      return;
+    }
+    if (historyRequest === null || recent.length === 0) return;
+    const item = recent.find(({ id }) => id === historyRequest);
+    if (!item) return;
+    setPlan(item.plan);
+    setCity(item.plan.city);
+    setDays(item.plan.days);
+    setPreferences(item.plan.preferences);
+    setMessage("Past itinerary loaded from this browser.");
+    router.replace("/demo/#plan-controls");
+  }, [newPlanRequest, historyRequest, recent, router]);
+
   function generate(event: React.FormEvent) {
     event.preventDefault();
     try {
@@ -53,10 +82,15 @@ export default function DemoPlanner() {
         variation.current += 1;
       }
       setPlan(next);
-      setMessage("Itinerary ready.");
+      try {
+        addRecentItinerary(next);
+        setMessage("Itinerary ready. Added to recent itineraries.");
+      } catch {
+        setMessage("Itinerary ready. Recent history could not be saved in this browser.");
+      }
       requestAnimationFrame(() => itineraryRef.current?.scrollIntoView({ block: "start" }));
     } catch {
-      setMessage("Choose one to three whole days.");
+      setMessage("Choose one to seven whole days.");
     }
   }
 
@@ -142,7 +176,7 @@ export default function DemoPlanner() {
           <circle cx="294" cy="32" r="15" fill="#e9b78e" /><path d="M16 146C75 120 112 150 169 140S277 143 329 146" fill="none" stroke="#b5482b" strokeWidth="3" />
         </svg>
         <h2>A little city escape.</h2>
-        <div className={styles.cityStats}><span><b>01—03</b>days</span><span><b>{cityPlaces[city].length}</b>places</span><span><b>YOUR</b>order</span></div>
+        <div className={styles.cityStats}><span><b>01—07</b>days</span><span><b>{cityPlaces[city].length}</b>places</span><span><b>YOUR</b>order</span></div>
       </aside>
       </div>
       <div className={styles.layout}>
@@ -153,6 +187,7 @@ export default function DemoPlanner() {
             setCity(event.target.value as City);
             setPlan(null);
             variation.current = 0;
+            setMessage(`Ready to build a new ${event.target.value} itinerary.`);
           }}>
             {destinations.map((destination) => <option key={destination} value={destination}>{destination}, UK</option>)}
           </select>
@@ -162,7 +197,7 @@ export default function DemoPlanner() {
             type="number"
             inputMode="numeric"
             min="1"
-            max="3"
+            max="7"
             step="1"
             required
             value={days}
@@ -187,7 +222,7 @@ export default function DemoPlanner() {
               </label>
             ))}
           </fieldset>
-          <button type="submit">{plan ? "Try another plan ↻" : "Build itinerary →"}</button>
+          <button type="submit">{activePlan ? "Try another plan ↻" : "Build itinerary →"}</button>
           {saved && (
             <div className={styles.saved}>
               <button type="button" onClick={load}>
@@ -198,8 +233,9 @@ export default function DemoPlanner() {
               </button>
             </div>
           )}
-          <details className={styles.transfer}><summary>Import a plan file</summary>
-            <label htmlFor="import-plan">Continue from a plan file</label>
+          <details className={styles.transfer}><summary>Transfer an itinerary (JSON)</summary>
+            <p className={styles.small}>A JSON file is a portable, plain-text copy of your city, trip length, interests and stop order. It can be inspected or imported on another device; it is read in this browser and never uploaded.</p>
+            <label htmlFor="import-plan">Import an itinerary file</label>
             <input id="import-plan" type="file" accept=".json,application/json" onChange={importFile} aria-describedby="import-help" />
             <p className={styles.small} id="import-help">A valid file replaces the open plan. Your saved copy stays unchanged. Files are read here, never uploaded.</p>
           </details>
@@ -209,7 +245,7 @@ export default function DemoPlanner() {
           ref={itineraryRef}
           aria-label="Your itinerary"
         >
-          {!plan ? (
+          {!activePlan ? (
             <div className={styles.empty}>
               <span className={styles.emptyMark} aria-hidden="true">↗</span>
               <h2>Where will the day take you?</h2>
@@ -220,7 +256,7 @@ export default function DemoPlanner() {
               <div className={styles.planHeading}>
                 <div>
                   <p className={styles.eyebrow}>
-                    {plan.city.toUpperCase()} / {plan.days} {plan.days === 1 ? "DAY" : "DAYS"}
+                    {activePlan.city.toUpperCase()} / {activePlan.days} {activePlan.days === 1 ? "DAY" : "DAYS"}
                   </p>
                   <h2>Your itinerary</h2>
                 </div>
@@ -228,32 +264,32 @@ export default function DemoPlanner() {
                   <button type="button" onClick={save}>
                     <BookmarkBorder fontSize="small" /> Save locally
                   </button>
-                  <button type="button" onClick={download}><DownloadOutlined fontSize="small" /> Download plan</button>
+                  <button type="button" onClick={download}><DownloadOutlined fontSize="small" /> Export JSON</button>
                   <button type="button" onClick={() => window.print()}>
                     <PrintOutlined fontSize="small" /> Print / PDF
                   </button>
                 </div>
               </div>
-              {Array.from({ length: plan.days }, (_, day) => (
+              {Array.from({ length: activePlan.days }, (_, day) => (
                 <article className={styles.day} key={day}>
                   <h3>
                     <span>{String(day + 1).padStart(2, "0")}</span><span>Day {day + 1}</span>
                   </h3>
                   <ol>
-                    {plan.stops
+                    {activePlan.stops
                       .slice(day * 2, day * 2 + 2)
                       .map((stop, offset) => {
                         const index = day * 2 + offset;
                         return (
                           <li key={stop.id}>
                             <div>
-                              <span className={styles.category} data-category={stop.category}>
+                              <span className={styles.category} data-category={stop.category.toLowerCase().replaceAll(" & ", "-").replaceAll(" ", "-")}>
                                 {stop.category}
                               </span>
                               <h4>{stop.name}</h4>
                               <p>{stop.note}</p>
                               <a
-                                href={`https://www.openstreetmap.org/search?query=${encodeURIComponent(stop.name + ", " + plan.city)}`}
+                                href={`https://www.openstreetmap.org/search?query=${encodeURIComponent(stop.name + ", " + activePlan.city)}`}
                               >
                                 Find on OpenStreetMap ↗
                               </a>
@@ -275,7 +311,7 @@ export default function DemoPlanner() {
                               <button
                                 type="button"
                                 aria-label={`Move ${stop.name} later`}
-                                disabled={index === plan.stops.length - 1}
+                                disabled={index === activePlan.stops.length - 1}
                                 onClick={() =>
                                   setPlan(
                                     (current) =>

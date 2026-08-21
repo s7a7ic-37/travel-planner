@@ -23,10 +23,11 @@ const Navbar = () => {
     <header className={styles.bar}>
       <Link href="/demo/" className={styles.brand}><img src="/favicon.svg" width="38" height="38" alt="" /><strong>Ready, Jet Set, Go!</strong></Link>
       <a className={styles.source} href="https://github.com/s7a7ic-37/travel-planner">GitHub ↗</a>
-      <IconButton aria-label="Open navigation menu" aria-expanded={open} sx={{ borderRadius: 2, minWidth: 44, minHeight: 44, border: "1px solid", borderColor: "divider" }} onClick={toggleMenu}>
-        <MenuIcon />
+      <IconButton aria-label={open ? "Close navigation menu" : "Open navigation menu"} aria-expanded={open} aria-controls="travel-planner-drawer" sx={{ borderRadius: 2, minWidth: 44, minHeight: 44, border: "1px solid", borderColor: "divider" }} onClick={toggleMenu}>
+        {open ? <span aria-hidden="true">×</span> : <MenuIcon />}
       </IconButton>
       <SwipeableDrawer
+        PaperProps={{ id: "travel-planner-drawer", sx: { width: "min(390px, 92vw)", bgcolor: "background.paper", color: "text.primary" } }}
         onOpen={handleOpenMenu}
         open={open}
         onClose={handleCloseMenu}

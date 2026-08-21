@@ -51,8 +51,13 @@
 .day li:last-child { border-bottom: 0; }
 .day li > div:first-child { min-width: 0; overflow-wrap: anywhere; }
 .category { display: inline-block; padding: 4px 9px; border-radius: 20px; font-size: 12px; font-weight: 700; background: var(--travel-culture-bg); color: var(--travel-culture-ink); }
-.category[data-category="Museums"] { background: var(--travel-museum-bg); color: var(--travel-museum-ink); }
-.category[data-category="Outdoors"] { background: var(--travel-outdoor-bg); color: var(--travel-outdoor-ink); }
+.category[data-category="museums"] { background: var(--travel-museum-bg); color: var(--travel-museum-ink); }
+.category[data-category="outdoors"] { background: var(--travel-outdoor-bg); color: var(--travel-outdoor-ink); }
+.category[data-category="culture"] { background: var(--travel-culture-bg); color: var(--travel-culture-ink); }
+.category[data-category="food-drink"] { background: var(--travel-food-bg); color: var(--travel-food-ink); }
+.category[data-category="architecture"] { background: var(--travel-architecture-bg); color: var(--travel-architecture-ink); }
+.category[data-category="music-nightlife"] { background: var(--travel-music-bg); color: var(--travel-music-ink); }
+.category[data-category="family"] { background: var(--travel-family-bg); color: var(--travel-family-ink); }
 .day h4 { font: 800 23px/1.25 "Trebuchet MS",Arial,sans-serif; letter-spacing: -.025em; margin: 12px 0; }
 .day p { font-size: 14px; color: var(--travel-muted); margin: 0 0 12px; }
 .day a { display: inline-flex; align-items: center; min-height: 44px; font-size: 13px; }
