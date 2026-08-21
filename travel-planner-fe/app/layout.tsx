@@ -8,7 +8,7 @@ import AppMuiThemeProvider from "@/shared/AppMuiThemeProvider";
 import { destinations } from "@/lib/demo";
 
 export const metadata = {
-  title: "Ready, Jet Set, Go! · Manchester planner",
+  title: "Ready, Jet Set, Go! · UK city planner",
   description:
     `Plan a city break in ${destinations.join(", ")} and save your itinerary.`,
   icons: {
