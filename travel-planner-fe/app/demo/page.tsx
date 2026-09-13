@@ -7,7 +7,6 @@ import BookmarkBorder from "@mui/icons-material/BookmarkBorder";
 import PrintOutlined from "@mui/icons-material/PrintOutlined";
 import {
   createPlan,
-  cityGuides,
   cityPlaces,
   destinations,
   interests,
@@ -335,7 +334,6 @@ export default function DemoPlanner() {
           </p>
         </section>
       </div>
-      <details className={styles.about}><summary>About the places</summary><p>Curated sample places for five UK cities, not live search or route planning. Check opening times, travel, availability and accessibility before visiting.</p><a href={cityGuides[city]}>{city} visitor guide ↗</a></details>
       <p className={styles.links}>
         <a href="https://github.com/s7a7ic-37/travel-planner">
           Source ↗

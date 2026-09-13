@@ -30,7 +30,7 @@
 .demo :focus-visible { outline: 3px solid #bd5a2a; outline-offset: 4px; }
 .saved { display: grid; gap: 8px; margin-top: 12px; }
 .transfer { margin-top: 20px; border-top: 1px solid var(--travel-line); }
-.transfer summary, .about summary { min-height: 44px; padding: 12px 0; font-size: 14px; cursor: pointer; }
+.transfer summary { min-height: 44px; padding: 12px 0; font-size: 14px; cursor: pointer; }
 .transfer label { display: block; font-size: 13px; margin: 12px 0; }
 .transfer input { width: 100%; font: 12px "Trebuchet MS",Arial,sans-serif; }
 .transfer input::file-selector-button { min-height: 44px; padding: 8px 10px; border: 1px solid var(--travel-field-line); border-radius: 8px; background: var(--travel-surface); color: var(--travel-ink); cursor: pointer; }
@@ -64,8 +64,6 @@
 .reorder { display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; align-self: center; }
 .reorder button { padding: 6px; font-size: 20px; background: var(--travel-bg); }
 .message { font-size: 14px; color: var(--travel-accent); min-height: 24px; }
-.about { border-top: 1px solid var(--travel-line); margin-top: 30px; color: var(--travel-muted); font-size: 13px; }
-.about a { display: inline-flex; align-items: center; min-height: 44px; }
 .links { display: flex; flex-wrap: wrap; gap: 12px 28px; font-size: 13px; }
 .links a { display: inline-flex; align-items: center; min-height: 44px; }
 @media(max-width:800px) {
@@ -93,7 +91,7 @@
 @media print {
   .demo { margin: 0; background: white; color: black; }
   .demo * { color: black !important; background: transparent !important; }
-  .hero, .controls, .actions, .reorder, .links, .message, .about { display: none; }
+  .hero, .controls, .actions, .reorder, .links, .message { display: none; }
   .layout { display: block; }
   .day { break-inside: avoid; }
 }

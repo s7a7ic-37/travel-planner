@@ -166,13 +166,6 @@ export const cityPlaces: Record<City, Stop[]> = {
   Liverpool: liverpoolPlaces,
   York: yorkPlaces,
 };
-export const cityGuides: Record<City, string> = {
-  Manchester: "https://www.visitmanchester.com/things-to-see-and-do/",
-  London: "https://www.visitlondon.com/things-to-do",
-  Edinburgh: "https://www.visitscotland.com/places-to-go/edinburgh/things-to-do",
-  Liverpool: "https://www.visitliverpool.com/things-to-do/",
-  York: "https://www.visityork.org/things-to-do",
-};
 export const places = cityPlaces.Manchester;
 
 export type RecentItinerary = { id: string; createdAt: number; plan: Plan };

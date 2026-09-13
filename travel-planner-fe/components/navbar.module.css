@@ -1,7 +1,5 @@
 .bar { width: min(1152px, calc(100% - 32px)); margin: 0 auto; display: flex; align-items: center; gap: 18px; min-height: 88px; border-bottom: 1px solid var(--travel-line); font-family: "Trebuchet MS",Arial,sans-serif; }
 .brand { display: inline-flex; align-items: center; gap: 12px; color: var(--travel-ink); text-decoration: none; margin-right: auto; }
-.brand img { width: 38px; height: 38px; }
-.brand strong { font-size: 18px; font-weight: 800; letter-spacing: -.035em; }
-.source { color: var(--travel-accent); font-size: 14px; text-underline-offset: 4px; display: inline-flex; align-items: center; min-height: 44px; }
-@media(max-width:600px) { .bar { min-height: 76px; gap: 8px; } .source { display: none; } .brand strong { font-size: 15px; } }
+.brand img { display: block; width: 120px; height: auto; padding: 4px; border-radius: 7px; background: #fff3dd; }
+@media(max-width:600px) { .bar { min-height: 76px; gap: 8px; } .brand img { width: 104px; } }
 @media print { .bar { display: none; } }
