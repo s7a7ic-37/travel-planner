@@ -5,7 +5,6 @@
 .actions a { min-height: 48px; display: inline-flex; align-items: center; padding: 0 24px; border-radius: 28px; background: var(--travel-accent); color: var(--travel-accent-ink); text-decoration: none; font-size: 15px; font-weight: 700; }
 .postcard { padding: 32px; background: var(--travel-city); border-radius: 28px; }
 .postcard > span { font-size: 12px; font-weight: 700; color: var(--travel-city-ink); }
-.postcard img { display: block; margin: 28px 0; }
 .postcard h2 { font: 800 34px/1.15 "Trebuchet MS",Arial,sans-serif; margin: 12px 0; letter-spacing: -.04em; }
 .postcard p { color: var(--travel-city-muted); font-size: 14px; }
 .postcard a { min-height: 44px; display: inline-flex; align-items: center; color: var(--travel-accent); font-size: 14px; text-underline-offset: 4px; }
