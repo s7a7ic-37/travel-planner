@@ -4,5 +4,6 @@
   "compatibility_date": "2026-10-30",
   "workers_dev": true,
   "preview_urls": false,
+  "routes": [{ "pattern": "travel.artemislab.co.uk", "custom_domain": true }],
   "assets": { "directory": "travel-planner-fe/out" }
 }

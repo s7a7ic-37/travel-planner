@@ -2,7 +2,7 @@
 
 A city itinerary planner built with Next.js, React, TypeScript and Material UI.
 
-**[Try the planner](https://travel-planner-demo.mpasiecki.workers.dev/demo/)** · **[Original team project](https://github.com/lai1372/travel-planner)**
+**[Try the planner](https://travel.artemislab.co.uk/demo/)** · **[Original team project](https://github.com/lai1372/travel-planner)**
 
 ## Plan a city day
 
