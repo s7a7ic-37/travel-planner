@@ -7,7 +7,6 @@ import Typography from "@mui/material/Typography";
 import Close from "@mui/icons-material/Close";
 import AddLocationAltOutlined from "@mui/icons-material/AddLocationAltOutlined";
 import HistoryOutlined from "@mui/icons-material/HistoryOutlined";
-import TravelExploreOutlined from "@mui/icons-material/TravelExploreOutlined";
 import LoginOutlined from "@mui/icons-material/LoginOutlined";
 import LogoutOutlined from "@mui/icons-material/LogoutOutlined";
 import { useContext } from "react";
@@ -29,15 +28,13 @@ export default function HamburgerList({ handleCloseMenu }: HamburgerListProps) {
       <NextLink className={styles.primary} href="/demo/?new=1" onClick={handleCloseMenu}>
         <AddLocationAltOutlined /><span><b>Start a new itinerary</b><small>Choose a city, interests and trip length</small></span>
       </NextLink>
-      <NextLink className={styles.navLink} href="/demo/#plan-controls" onClick={handleCloseMenu}><TravelExploreOutlined /> Explore destinations</NextLink>
       <Divider className={styles.divider} />
       <section aria-labelledby="recent-heading">
         <div className={styles.sectionHeading}><h3 id="recent-heading"><HistoryOutlined /> Recent itineraries</h3>{recent.length > 0 && <button type="button" onClick={clearRecentItineraries}>Clear</button>}</div>
         {recent.length === 0 ? <p className={styles.empty}>Plans you generate on this device will appear here.</p> : recent.map(({ id, createdAt, plan }) => (
           <NextLink key={id} className={styles.recent} href={`/demo/?history=${encodeURIComponent(id)}`} onClick={handleCloseMenu}>
             <b>{plan.city} · {plan.days} {plan.days === 1 ? "day" : "days"}</b>
-            <span>{plan.stops.slice(0, 2).map((stop) => stop.name).join(" · ")}</span>
-            <time dateTime={new Date(createdAt).toISOString()}>{new Date(createdAt).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" })}</time>
+            <time dateTime={new Date(createdAt).toISOString()}>{new Date(createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</time>
           </NextLink>
         ))}
       </section>

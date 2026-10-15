@@ -1,6 +1,5 @@
 .bar { width: min(1152px, calc(100% - 32px)); margin: 0 auto; display: flex; align-items: center; gap: 18px; min-height: 88px; border-bottom: 1px solid var(--travel-line); font-family: "Trebuchet MS",Arial,sans-serif; }
 .brand { display: inline-flex; align-items: center; gap: 12px; color: var(--travel-ink); text-decoration: none; margin-right: auto; }
-.brandMark { color: #b5482b; font-size: 22px; line-height: 1; }
 .brand strong { font: 700 16px Georgia,"Times New Roman",serif; letter-spacing: .01em; }
-@media(max-width:600px) { .bar { min-height: 76px; gap: 8px; } .brand { gap: 8px; } .brand strong { font-size: 14px; } }
+@media(max-width:600px) { .bar { min-height: 76px; gap: 8px; } .brand strong { font-size: 14px; } }
 @media print { .bar { display: none; } }

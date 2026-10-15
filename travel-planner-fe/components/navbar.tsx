@@ -21,7 +21,7 @@ const Navbar = () => {
   };
   return (
     <header className={styles.bar}>
-      <Link href="/demo/" className={styles.brand} aria-label="Ready, Jet Set, Go! home"><span className={styles.brandMark} aria-hidden="true">✈</span><strong>Ready, Jet Set, Go!</strong></Link>
+      <Link href="/demo/" className={styles.brand} aria-label="Ready, Jet Set, Go! home"><strong>Ready, Jet Set, Go!</strong></Link>
       <IconButton aria-label={open ? "Close navigation menu" : "Open navigation menu"} aria-expanded={open} aria-controls="travel-planner-drawer" sx={{ borderRadius: 2, minWidth: 44, minHeight: 44, border: "1px solid", borderColor: "divider" }} onClick={toggleMenu}>
         {open ? <span aria-hidden="true">×</span> : <MenuIcon />}
       </IconButton>

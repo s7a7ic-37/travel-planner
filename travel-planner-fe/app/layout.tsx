@@ -13,8 +13,7 @@ export const metadata = {
     `Plan a city break in ${destinations.join(", ")} and save your itinerary.`,
   icons: {
     icon: [
-      { url: "/favicon-32.png?v=20261031", type: "image/png", sizes: "32x32" },
-      { url: "/favicon.svg?v=20261031", type: "image/svg+xml" },
+      { url: "/favicon.svg?v=wordmark", type: "image/svg+xml" },
     ],
     apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
   },
