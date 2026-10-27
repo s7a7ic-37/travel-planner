@@ -335,11 +335,11 @@ export default function DemoPlanner() {
         </section>
       </div>
       <p className={styles.links}>
+        <a href="https://portfolio.artemislab.co.uk">
+          ← All projects
+        </a>
         <a href="https://github.com/s7a7ic-37/travel-planner">
           Source ↗
-        </a>
-        <a href="https://portfolio.artemislab.co.uk">
-          Maksymilian’s portfolio ↗
         </a>
       </p>
     </main>
