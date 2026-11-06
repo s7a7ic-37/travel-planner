@@ -7,7 +7,7 @@ import BookmarkBorder from "@mui/icons-material/BookmarkBorder";
 import PrintOutlined from "@mui/icons-material/PrintOutlined";
 import {
   createPlan,
-  cityPlaces,
+  availablePlaces,
   destinations,
   interests,
   moveStop,
@@ -41,6 +41,8 @@ export default function DemoPlanner() {
 
   useEffect(() => {
     try {
+      // Browser storage is restored after hydration so the initial markup stays consistent.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSaved(Boolean(localStorage.getItem(STORAGE_KEY)));
     } catch {
       setMessage(
@@ -51,6 +53,8 @@ export default function DemoPlanner() {
 
   useEffect(() => {
     if (newPlanRequest !== null) {
+      // Apply the menu's URL command once, then remove it from the URL below.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setPlan(null);
       setCity("Manchester");
       setDays(2);
@@ -175,7 +179,7 @@ export default function DemoPlanner() {
           <circle cx="294" cy="32" r="15" fill="#e9b78e" /><path d="M16 146C75 120 112 150 169 140S277 143 329 146" fill="none" stroke="#b5482b" strokeWidth="3" />
         </svg>
         <h2>A little city escape.</h2>
-        <div className={styles.cityStats}><span><b>01—07</b>days</span><span><b>{cityPlaces[city].length}</b>places</span><span><b>YOUR</b>order</span></div>
+        <div className={styles.cityStats}><span><b>01—07</b>days</span><span><b>{availablePlaces(city).length}</b>places</span><span><b>YOUR</b>order</span></div>
       </aside>
       </div>
       <div className={styles.layout}>
@@ -335,7 +339,7 @@ export default function DemoPlanner() {
         </section>
       </div>
       <p className={styles.links}>
-        <a href="https://portfolio.artemislab.co.uk">
+        <a href="https://portfolio.artemislab.co.uk/#projects">
           ← All projects
         </a>
         <a href="https://github.com/s7a7ic-37/travel-planner">

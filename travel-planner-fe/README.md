@@ -4,7 +4,7 @@ Next.js, React, TypeScript and Material UI frontend for Ready, Jet Set, Go!
 
 **[Guest demo](https://travel.artemislab.co.uk/demo/)** · **[Project guide and team credit](../README.md)**
 
-The demo builds editable Manchester itineraries with local saving, JSON import/export and printing. Firebase and Mapbox integrations are optional and unconfigured in the public demo.
+The demo builds editable itineraries across five UK cities, with local saving, JSON import/export and printing. Firebase and Mapbox integrations are optional and unconfigured in the public demo.
 
 ## Run locally
 

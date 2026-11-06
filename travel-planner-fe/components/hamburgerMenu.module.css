@@ -12,11 +12,11 @@
 .divider { margin: 18px 0 !important; border-color: var(--travel-line) !important; }
 .sectionHeading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .sectionHeading h3 { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 15px; }
-.sectionHeading button { border: 0; padding: 8px; background: transparent; color: var(--travel-accent); font: inherit; font-size: 12px; cursor: pointer; }
+.sectionHeading button { min-width: 44px; min-height: 44px; border: 0; padding: 8px; background: transparent; color: var(--travel-accent); font: inherit; font-size: 12px; cursor: pointer; }
 .empty { color: var(--travel-muted); font-size: 13px; line-height: 1.5; }
-.recent { display: grid; gap: 2px; margin-top: 5px; padding: 7px 9px; border-radius: 8px; }
+.recent { display: grid; align-content: center; min-height: 44px; gap: 2px; margin-top: 5px; padding: 7px 9px; border-radius: 8px; }
 .recent b { font-size: 13px; }
 .recent span, .recent time { color: var(--travel-muted); font-size: 11px; line-height: 1.45; }
 .account { display: grid; }
 .footer { display: grid; gap: 6px; margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--travel-line); color: var(--travel-muted); }
-.footer a { width: fit-content; color: var(--travel-accent); font-size: 12px; text-underline-offset: 3px; }
+.footer a { display: inline-flex; align-items: center; min-height: 44px; width: fit-content; color: var(--travel-accent); font-size: 12px; text-underline-offset: 3px; }

@@ -7,6 +7,7 @@ export type Stop = {
   name: string;
   category: Interest;
   note: string;
+  closed?: boolean;
 };
 export type Plan = {
   city: City;
@@ -108,7 +109,7 @@ const edinburghPlaces: Stop[] = [
   { id: "edinburgh-surgeons-hall", name: "Surgeons' Hall Museums", category: "Museums", note: "Discover the history of medicine and surgery." },
   { id: "edinburgh-writers", name: "Writers' Museum", category: "Museums", note: "Learn about Robert Burns, Walter Scott and Robert Louis Stevenson." },
   { id: "edinburgh-holyrood", name: "Holyrood Park", category: "Outdoors", note: "Walk the open landscape beneath Arthur's Seat." },
-  { id: "edinburgh-botanic", name: "Royal Botanic Garden Edinburgh", category: "Outdoors", note: "Explore gardens and glasshouses north of the centre." },
+  { id: "edinburgh-botanic", name: "Royal Botanic Garden Edinburgh", category: "Outdoors", note: "Explore the outdoor gardens north of the centre; check access updates before visiting the glasshouses." },
   { id: "edinburgh-calton", name: "Calton Hill", category: "Outdoors", note: "Take in city views among historic monuments." },
   { id: "edinburgh-dean", name: "Dean Village and Water of Leith", category: "Outdoors", note: "Follow the riverside path through the historic village." },
   { id: "edinburgh-castle", name: "Edinburgh Castle", category: "Culture", note: "Visit the landmark above the Old Town." },
@@ -123,7 +124,7 @@ const edinburghPlaces: Stop[] = [
 
 const liverpoolPlaces: Stop[] = [
   { id: "liverpool-museum", name: "Museum of Liverpool", category: "Museums", note: "Explore the city's history and communities on the waterfront." },
-  { id: "liverpool-maritime", name: "Merseyside Maritime Museum", category: "Museums", note: "Discover the port city's maritime stories." },
+  { id: "liverpool-maritime", name: "Merseyside Maritime Museum", category: "Museums", note: "Temporarily closed for redevelopment. Choose another museum before travelling.", closed: true },
   { id: "liverpool-world-museum", name: "World Museum", category: "Museums", note: "Explore collections from natural history to world cultures." },
   { id: "liverpool-tate", name: "Tate Liverpool + RIBA North", category: "Museums", note: "Find art and architecture exhibitions at the waterfront." },
   { id: "liverpool-sefton", name: "Sefton Park", category: "Outdoors", note: "Walk the paths around the lake and Palm House." },
@@ -168,6 +169,10 @@ export const cityPlaces: Record<City, Stop[]> = {
 };
 export const places = cityPlaces.Manchester;
 
+export function availablePlaces(city: City): Stop[] {
+  return cityPlaces[city].filter(place => !place.closed);
+}
+
 export type RecentItinerary = { id: string; createdAt: number; plan: Plan };
 export const HISTORY_KEY = "travel-planner-recent-v1";
 export function readRecentItineraries(text: string | null): RecentItinerary[] {
@@ -202,7 +207,7 @@ export function createPlan(days: number, preferences: Interest[], variation = 0,
     throw new Error("Choose one to seven whole days and supported interests.");
   }
   const unique = [...new Set(preferences)];
-  const catalogue = cityPlaces[city];
+  const catalogue = availablePlaces(city);
   const offset = variation % catalogue.length;
   const ranked = [...catalogue.slice(offset), ...catalogue.slice(0, offset)].sort(
     (a, b) =>

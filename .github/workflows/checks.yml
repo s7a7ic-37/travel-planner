@@ -16,6 +16,7 @@ jobs:
           cache: npm
           cache-dependency-path: travel-planner-fe/package-lock.json
       - run: npm ci
+      - run: npm run lint
       - run: npm test
       - run: npm run build
       - name: Scan published files for credentials

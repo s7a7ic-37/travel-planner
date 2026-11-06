@@ -11,6 +11,7 @@ import LoginOutlined from "@mui/icons-material/LoginOutlined";
 import LogoutOutlined from "@mui/icons-material/LogoutOutlined";
 import { useContext } from "react";
 import { AuthContext } from "@/app/context/AuthContext";
+import firebase_app from "@/app/firebase/config";
 import { useRecentItineraries, clearRecentItineraries } from "@/hooks/useRecentItineraries";
 import styles from "./hamburgerMenu.module.css";
 
@@ -38,10 +39,10 @@ export default function HamburgerList({ handleCloseMenu }: HamburgerListProps) {
           </NextLink>
         ))}
       </section>
-      <Divider className={styles.divider} />
+      {firebase_app.options.apiKey && <><Divider className={styles.divider} />
       <div className={styles.account}>
         {user?.uid ? <><NextLink className={styles.navLink} href="/trips" onClick={handleCloseMenu}><HistoryOutlined /> Account itineraries</NextLink><NextLink className={styles.navLink} href="/logout" onClick={handleCloseMenu}><LogoutOutlined /> Sign out</NextLink></> : <NextLink className={styles.navLink} href="/sign-in" onClick={handleCloseMenu}><LoginOutlined /> Sign in</NextLink>}
-      </div>
+      </div></>}
       <footer className={styles.footer}><Typography variant="caption">Recent guest plans stay in this browser.</Typography><a href="https://github.com/s7a7ic-37/travel-planner">Project source ↗</a></footer>
     </Box>
   );

@@ -26,7 +26,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head><script src="/theme.js" /></head>
+      <head>
+        {/* Set the local-clock theme before first paint to avoid a flash of the wrong theme. */}
+        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+        <script src="/theme.js" />
+      </head>
       <body
         style={{
           margin: 0,

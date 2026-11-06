@@ -38,6 +38,8 @@ The source includes Firebase authentication/itinerary storage and Mapbox integra
 
 The guest planner uses curated examples, with no live search, bookings, map feed or route optimization. Opening times, accessibility, journey times, availability and prices are not checked. Verify details before travelling.
 
+New plans skip known closures. Older saved plans still load with updated closure notes. Catalogue access corrections use [Visit Liverpool](https://www.visitliverpool.com/listing/maritime-museum-temporarily-closed/898701/) and [Royal Botanic Garden Edinburgh](https://www.rbge.org.uk/visit/royal-botanic-garden-edinburgh/); live opening times still need checking.
+
 ## Team credit
 
 Originally a four-person Northcoders project. This is Maksymilian Pasiecki's personal fork; the original team history and authorship are preserved. His original contributions included Firebase authentication, itinerary storage/deletion, places API and maps integration.

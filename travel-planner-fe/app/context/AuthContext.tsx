@@ -21,11 +21,9 @@ interface AuthContextProviderProps {
 export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const [user, setUser] = React.useState<FirebaseUser | null>(null);
   const [name, setName] = React.useState<string | null>(null);
-  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     if (!firebase_app.options.apiKey) {
-      setLoading(false);
       return;
     }
     const auth = getAuth(firebase_app);
@@ -47,7 +45,6 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         setUser(null);
         setName(null);
       }
-      setLoading(false);
     });
 
     return () => unsubscribe();

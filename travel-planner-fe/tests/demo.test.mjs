@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createPlan, moveStop, restorePlan, exportPlan, importPlanFile, places, cityPlaces, destinations, interests, readRecentItineraries, rememberItinerary } from "../lib/demo.ts";
+import { createPlan, moveStop, restorePlan, exportPlan, importPlanFile, places, cityPlaces, availablePlaces, destinations, interests, readRecentItineraries, rememberItinerary } from "../lib/demo.ts";
 
 test("alternative plans reach every city catalogue and remain portable", () => {
   assert.equal(destinations.length, 5);
@@ -8,7 +8,7 @@ test("alternative plans reach every city catalogue and remain portable", () => {
   const allIds = destinations.flatMap(city => cityPlaces[city].map(place => place.id));
   assert.equal(new Set(allIds).size, allIds.length);
   for (const city of destinations) {
-    const catalogue = cityPlaces[city];
+    const catalogue = availablePlaces(city);
     assert.ok(catalogue.length >= 12);
     assert.ok(interests.every(interest => catalogue.some(place => place.category === interest)));
     const reached = new Set();
@@ -37,6 +37,21 @@ test("alternative plans reach every city catalogue and remain portable", () => {
   assert.throws(() => createPlan(2, [], -1));
   assert.throws(() => createPlan(2, [], 1.5));
   assert.throws(() => createPlan(2, [], 0, "Paris"));
+});
+
+test("new plans skip known closures while saved itineraries retain their stops and updated notes", () => {
+  for (let variation = 0; variation < cityPlaces.Liverpool.length; variation++) {
+    const plan = createPlan(7, ["Museums"], variation, "Liverpool");
+    assert.equal(plan.stops.length, 14);
+    assert.ok(plan.stops.every(stop => !stop.closed));
+  }
+  const saved = createPlan(1, [], 0, "Liverpool");
+  saved.stops[0] = cityPlaces.Liverpool.find(stop => stop.id === "liverpool-maritime");
+  const restored = restorePlan(JSON.stringify(saved));
+  assert.equal(restored.stops[0].id, "liverpool-maritime");
+  assert.equal(restored.stops[0].closed, true);
+  assert.match(restored.stops[0].note, /Temporarily closed/);
+  assert.deepEqual(restorePlan(exportPlan(restored)), restored);
 });
 
 test("portable plans preserve the reordered itinerary and only use known place text", async () => {
