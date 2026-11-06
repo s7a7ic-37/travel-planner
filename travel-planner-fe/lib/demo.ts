@@ -209,10 +209,23 @@ export function createPlan(days: number, preferences: Interest[], variation = 0,
   const unique = [...new Set(preferences)];
   const catalogue = availablePlaces(city);
   const offset = variation % catalogue.length;
-  const ranked = [...catalogue.slice(offset), ...catalogue.slice(0, offset)].sort(
-    (a, b) =>
-      Number(unique.includes(b.category)) - Number(unique.includes(a.category)),
-  );
+  const categories = unique.length ? unique : [...interests];
+  const categoryOffset = offset % categories.length;
+  const groups = [...categories.slice(categoryOffset), ...categories.slice(0, categoryOffset)].map(category => {
+    const choices = catalogue.filter(place => place.category === category);
+    const start = offset % choices.length;
+    return [...choices.slice(start), ...choices.slice(0, start)];
+  });
+  const ranked: Stop[] = [];
+  for (let round = 0; groups.some(group => round < group.length); round++) {
+    for (const group of groups) {
+      if (group[round]) ranked.push(group[round]);
+    }
+  }
+  if (unique.length) {
+    ranked.push(...[...catalogue.slice(offset), ...catalogue.slice(0, offset)]
+      .filter(place => !unique.includes(place.category)));
+  }
   return {
     city,
     days,

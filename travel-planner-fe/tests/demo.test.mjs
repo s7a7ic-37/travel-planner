@@ -2,6 +2,19 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createPlan, moveStop, restorePlan, exportPlan, importPlanFile, places, cityPlaces, availablePlaces, destinations, interests, readRecentItineraries, rememberItinerary } from "../lib/demo.ts";
 
+test("short plans mix selected interests and the next variation changes the stops", () => {
+  const first = createPlan(1, ["Outdoors", "Culture"], 0, "Edinburgh");
+  assert.deepEqual(first.stops.map(stop => stop.category), ["Outdoors", "Culture"]);
+  const next = createPlan(1, ["Outdoors", "Culture"], 1, "Edinburgh");
+  assert.notDeepEqual(next.stops.map(stop => stop.id), first.stops.map(stop => stop.id));
+  assert.equal(new Set(next.stops.map(stop => stop.category)).size, 2);
+});
+
+test("plans without preferences offer more than one category", () => {
+  const plan = createPlan(1, [], 0, "London");
+  assert.equal(new Set(plan.stops.map(stop => stop.category)).size, 2);
+});
+
 test("alternative plans reach every city catalogue and remain portable", () => {
   assert.equal(destinations.length, 5);
   assert.equal(places.length, 34);
