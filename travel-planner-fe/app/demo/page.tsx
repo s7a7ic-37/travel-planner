@@ -11,6 +11,7 @@ import {
   destinations,
   interests,
   moveStop,
+  replaceStop,
   restorePlan,
   exportPlan,
   importPlanFile,
@@ -284,7 +285,7 @@ export default function DemoPlanner() {
                       .map((stop, offset) => {
                         const index = day * 2 + offset;
                         return (
-                          <li key={stop.id}>
+                          <li key={index}>
                             <div>
                               <span className={styles.category} data-category={stop.category.toLowerCase().replaceAll(" & ", "-").replaceAll(" ", "-")}>
                                 {stop.category}
@@ -296,6 +297,21 @@ export default function DemoPlanner() {
                               >
                                 Find on OpenStreetMap ↗
                               </a>
+                              <select
+                                className={styles.replace}
+                                aria-label={`Replace ${stop.name}`}
+                                value=""
+                                onChange={(event) => {
+                                  const replacement = event.target.value;
+                                  setPlan(current => current && replaceStop(current, index, replacement));
+                                  setMessage("Stop replaced. Your saved copy is unchanged until you save.");
+                                }}
+                              >
+                                <option value="" disabled>Replace this stop…</option>
+                                {availablePlaces(activePlan.city)
+                                  .filter(place => !activePlan.stops.some(selected => selected.id === place.id))
+                                  .map(place => <option key={place.id} value={place.id}>{place.name} · {place.category}</option>)}
+                              </select>
                             </div>
                             <div className={styles.reorder}>
                               <button

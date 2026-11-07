@@ -1,6 +1,29 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createPlan, moveStop, restorePlan, exportPlan, importPlanFile, places, cityPlaces, availablePlaces, destinations, interests, readRecentItineraries, rememberItinerary } from "../lib/demo.ts";
+import { createPlan, moveStop, replaceStop, restorePlan, exportPlan, importPlanFile, places, cityPlaces, availablePlaces, destinations, interests, readRecentItineraries, rememberItinerary } from "../lib/demo.ts";
+
+test("replacing one stop preserves every other stop and the portable plan", () => {
+  for (const city of destinations) {
+    const original = createPlan(7, ["Museums"], 0, city);
+    const before = structuredClone(original);
+    const replacement = availablePlaces(city).find(place => !original.stops.some(stop => stop.id === place.id));
+    assert.ok(replacement);
+    for (const index of [0, 7, 13]) {
+      const changed = replaceStop(original, index, replacement.id);
+      assert.equal(changed.stops[index], replacement);
+      assert.equal(new Set(changed.stops.map(stop => stop.id)).size, 14);
+      assert.deepEqual(changed.stops.filter((_, position) => position !== index), original.stops.filter((_, position) => position !== index));
+      assert.deepEqual(restorePlan(exportPlan(changed)), changed);
+    }
+    assert.deepEqual(original, before);
+    for (const index of [-1, 14, 0.5, NaN]) assert.equal(replaceStop(original, index, replacement.id), original);
+    assert.equal(replaceStop(original, 0, original.stops[1].id), original);
+    assert.equal(replaceStop(original, 0, "not-a-place"), original);
+    const otherCity = destinations.find(other => other !== city);
+    assert.equal(replaceStop(original, 0, cityPlaces[otherCity][0].id), original);
+  }
+  assert.equal(replaceStop(createPlan(1, [], 0, "Liverpool"), 0, "liverpool-maritime").stops.some(stop => stop.closed), false);
+});
 
 test("short plans mix selected interests and the next variation changes the stops", () => {
   const first = createPlan(1, ["Outdoors", "Culture"], 0, "Edinburgh");

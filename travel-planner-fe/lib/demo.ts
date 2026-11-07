@@ -268,6 +268,13 @@ export async function importPlanFile(file: Pick<File, "size" | "text">): Promise
   return restorePlan(await file.text());
 }
 
+export function replaceStop(plan: Plan, index: number, id: string): Plan {
+  if (!Number.isInteger(index) || index < 0 || index >= plan.stops.length) return plan;
+  const replacement = availablePlaces(plan.city).find(place => place.id === id);
+  if (!replacement || plan.stops.some(stop => stop.id === id)) return plan;
+  return { ...plan, stops: plan.stops.map((stop, position) => position === index ? replacement : stop) };
+}
+
 export function moveStop(plan: Plan, index: number, delta: -1 | 1): Plan {
   const next = index + delta;
   if (

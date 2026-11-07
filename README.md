@@ -12,6 +12,7 @@ The guest demo uses curated places across Manchester, London, Edinburgh, Liverpo
 - Generate two stops per day, mixing your selected interests, and change their order. Other categories fill spare slots when needed.
 - Reopen one of the five most recent generated itineraries from the navigation menu.
 - Try another plan to explore different places with the same interests.
+- Replace an individual stop with an unused place in the same city, keeping the other days and stop order.
 - Save and load a plan in your browser, or remove the saved copy.
 - Export/import a JSON itinerary file or print the plan.
 - Open place searches on OpenStreetMap.

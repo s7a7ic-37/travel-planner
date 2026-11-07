@@ -61,6 +61,7 @@
 .day h4 { font: 800 23px/1.25 "Trebuchet MS",Arial,sans-serif; letter-spacing: -.025em; margin: 12px 0; }
 .day p { font-size: 14px; color: var(--travel-muted); margin: 0 0 12px; }
 .day a { display: inline-flex; align-items: center; min-height: 44px; font-size: 13px; }
+.replace { display: block; width: 100%; max-width: 28rem; min-width: 0; min-height: 44px; margin-top: 10px; padding: 8px; border: 1px solid var(--travel-field-line); border-radius: 8px; background: var(--travel-field); color: var(--travel-ink); font: 13px "Trebuchet MS",Arial,sans-serif; }
 .reorder { display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; align-self: center; }
 .reorder button { padding: 6px; font-size: 20px; background: var(--travel-bg); }
 .message { font-size: 14px; color: var(--travel-accent); min-height: 24px; }
@@ -91,7 +92,7 @@
 @media print {
   .demo { margin: 0; background: white; color: black; }
   .demo * { color: black !important; background: transparent !important; }
-  .hero, .controls, .actions, .reorder, .links, .message { display: none; }
+  .hero, .controls, .actions, .reorder, .replace, .links, .message { display: none; }
   .layout { display: block; }
   .day { break-inside: avoid; }
 }
