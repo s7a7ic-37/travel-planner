@@ -95,4 +95,5 @@
   .hero, .controls, .actions, .reorder, .replace, .links, .message { display: none; }
   .layout { display: block; }
   .day { break-inside: avoid; }
+  .day:last-of-type { margin-bottom: 0; }
 }
