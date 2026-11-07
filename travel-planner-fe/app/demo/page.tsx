@@ -33,6 +33,8 @@ export default function DemoPlanner() {
   const [saved, setSaved] = useState(false);
   const itineraryRef = useRef<HTMLElement>(null);
   const variation = useRef(0);
+  // A file read must not replace planner changes made while it was pending.
+  const revision = useRef(0);
   const recent = useRecentItineraries();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -54,6 +56,7 @@ export default function DemoPlanner() {
 
   useEffect(() => {
     if (newPlanRequest !== null) {
+      revision.current += 1;
       // Apply the menu's URL command once, then remove it from the URL below.
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setPlan(null);
@@ -68,6 +71,7 @@ export default function DemoPlanner() {
     if (historyRequest === null || recent.length === 0) return;
     const item = recent.find(({ id }) => id === historyRequest);
     if (!item) return;
+    revision.current += 1;
     setPlan(item.plan);
     setCity(item.plan.city);
     setDays(item.plan.days);
@@ -78,6 +82,7 @@ export default function DemoPlanner() {
 
   function generate(event: React.FormEvent) {
     event.preventDefault();
+    revision.current += 1;
     try {
       let next = createPlan(days, preferences, variation.current, city);
       variation.current += 1;
@@ -111,6 +116,7 @@ export default function DemoPlanner() {
   }
 
   function load() {
+    revision.current += 1;
     try {
       const loaded = restorePlan(localStorage.getItem(STORAGE_KEY) || "");
       setPlan(loaded);
@@ -150,17 +156,19 @@ export default function DemoPlanner() {
     const input = event.currentTarget;
     const file = input.files?.[0];
     if (!file) return;
+    const requested = ++revision.current;
+    input.value = "";
     try {
       const imported = await importPlanFile(file);
+      if (requested !== revision.current) return;
       setPlan(imported);
       setDays(imported.days);
       setCity(imported.city);
       setPreferences(imported.preferences);
       setMessage("Imported the sample plan. Your saved browser copy is unchanged until you save.");
     } catch {
+      if (requested !== revision.current) return;
       setMessage("That plan could not be imported. Use a valid sample-plan JSON file under 6 KB. Your open plan is unchanged.");
-    } finally {
-      input.value = "";
     }
   }
 
@@ -188,6 +196,7 @@ export default function DemoPlanner() {
           <h2>Make a plan</h2>
           <label htmlFor="destination">Destination</label>
           <select id="destination" value={city} onChange={(event) => {
+            revision.current += 1;
             setCity(event.target.value as City);
             setPlan(null);
             variation.current = 0;
@@ -205,7 +214,10 @@ export default function DemoPlanner() {
             step="1"
             required
             value={days}
-            onChange={(event) => setDays(Number(event.target.value))}
+            onChange={(event) => {
+              revision.current += 1;
+              setDays(Number(event.target.value));
+            }}
           />
           <fieldset>
             <legend>What do you enjoy?</legend>
@@ -214,13 +226,14 @@ export default function DemoPlanner() {
                 <input
                   type="checkbox"
                   checked={preferences.includes(interest)}
-                  onChange={() =>
+                  onChange={() => {
+                    revision.current += 1;
                     setPreferences((current) =>
                       current.includes(interest)
                         ? current.filter((value) => value !== interest)
                         : [...current, interest],
-                    )
-                  }
+                    );
+                  }}
                 />
                 {interest}
               </label>
@@ -302,6 +315,7 @@ export default function DemoPlanner() {
                                 aria-label={`Replace ${stop.name}`}
                                 value=""
                                 onChange={(event) => {
+                                  revision.current += 1;
                                   const replacement = event.target.value;
                                   setPlan(current => current && replaceStop(current, index, replacement));
                                   setMessage("Stop replaced. Your saved copy is unchanged until you save.");
@@ -318,12 +332,13 @@ export default function DemoPlanner() {
                                 type="button"
                                 aria-label={`Move ${stop.name} earlier`}
                                 disabled={index === 0}
-                                onClick={() =>
+                                onClick={() => {
+                                  revision.current += 1;
                                   setPlan(
                                     (current) =>
                                       current && moveStop(current, index, -1),
-                                  )
-                                }
+                                  );
+                                }}
                               >
                                 ↑
                               </button>
@@ -331,12 +346,13 @@ export default function DemoPlanner() {
                                 type="button"
                                 aria-label={`Move ${stop.name} later`}
                                 disabled={index === activePlan.stops.length - 1}
-                                onClick={() =>
+                                onClick={() => {
+                                  revision.current += 1;
                                   setPlan(
                                     (current) =>
                                       current && moveStop(current, index, 1),
-                                  )
-                                }
+                                  );
+                                }}
                               >
                                 ↓
                               </button>

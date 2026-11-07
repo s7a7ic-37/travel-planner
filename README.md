@@ -17,7 +17,7 @@ The guest demo uses curated places across Manchester, London, Edinburgh, Liverpo
 - Export/import a JSON itinerary file or print the plan.
 - Open place searches on OpenStreetMap.
 
-Recent plans, saved copies and imported files stay in the browser. JSON is a plain-text transfer format, so an itinerary can be inspected or moved between devices. Imports are limited to 6 KB and validated against the sample places. Importing replaces the open itinerary; saving it locally is a separate action.
+Recent plans, saved copies and imported files stay in the browser. JSON is a plain-text transfer format, so an itinerary can be inspected or moved between devices. Imports are limited to 6 KB and validated against the sample places. Importing replaces the open itinerary; saving it locally is a separate action. If you change the planner while a file is being read, your newer changes take priority.
 
 ## Run locally
 
