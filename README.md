@@ -33,6 +33,8 @@ Open [localhost:3000/demo/](http://localhost:3000/demo/).
 
 `npm test` checks generation, reordering, plan validation, storage and file transfers, plus offline Firebase reference construction. `npm run build` exports static pages to `travel-planner-fe/out/`. Cloudflare hosting is configured in the root `wrangler.jsonc`.
 
+For browser regressions, run `npx playwright install chromium webkit` once, then `npm run test:browser`. This builds and previews the static demo, checking keyboard reordering and browser-storage recovery on phone and desktop layouts. CI runs these checks without external service credentials.
+
 ## Integrations and demo limits
 
 The source includes Firebase authentication/itinerary storage and Mapbox integrations. These require separately owned service configuration; the public guest demo does not connect to them. Live backend operations are not verified.
