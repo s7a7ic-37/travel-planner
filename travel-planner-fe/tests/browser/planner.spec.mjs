@@ -9,6 +9,25 @@ test.beforeEach(async ({ page }) => {
   await page.getByRole('button', { name: 'Save locally', exact: true }).click();
 });
 
+test('reduced motion keeps the navigation usable without sliding transitions', async ({ page }) => {
+  await page.emulateMedia({reducedMotion: 'reduce'});
+  const saved = await page.evaluate(key => localStorage.getItem(key), savedKey);
+  const open = page.getByRole('button', {name: 'Open navigation menu', exact: true});
+  await open.click();
+  const menu = page.getByRole('navigation', {name: 'Trip planner', exact: true});
+  await expect(menu).toBeVisible();
+  await expect(page.locator('#travel-planner-drawer')).toHaveCSS('transition-duration', '0s');
+  await expect(page.locator('#travel-planner-drawer')).toHaveCSS('animation-name', 'none');
+  await page.emulateMedia({reducedMotion: 'no-preference'});
+  await expect(page.locator('#travel-planner-drawer')).not.toHaveCSS('transition-duration', '0s');
+  await page.emulateMedia({reducedMotion: 'reduce'});
+  await expect(page.locator('#travel-planner-drawer')).toHaveCSS('transition-duration', '0s');
+  await page.keyboard.press('Escape');
+  await expect(menu).toBeHidden();
+  await expect(open).toBeFocused();
+  expect(await page.evaluate(key => localStorage.getItem(key), savedKey)).toBe(saved);
+});
+
 test('keyboard focus follows a reordered stop without changing the saved copy', async ({ page }) => {
   const saved = await page.evaluate(key => localStorage.getItem(key), savedKey);
   const stops = page.locator('main li h4');

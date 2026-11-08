@@ -27,6 +27,13 @@ html[data-theme="dark"] {
   --travel-family-bg: #2e4054; --travel-family-ink: #c5dcf3;
 }
 html[data-theme] body { background: var(--travel-bg); color: var(--travel-ink); }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
 @media print {
   /* Override the clock script's inline colour scheme on the page canvas. */
   html[data-theme] { color-scheme: light !important; background: white; }
