@@ -9,7 +9,7 @@ import AddLocationAltOutlined from "@mui/icons-material/AddLocationAltOutlined";
 import HistoryOutlined from "@mui/icons-material/HistoryOutlined";
 import LoginOutlined from "@mui/icons-material/LoginOutlined";
 import LogoutOutlined from "@mui/icons-material/LogoutOutlined";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "@/app/context/AuthContext";
 import firebase_app from "@/app/firebase/config";
 import { useRecentItineraries, clearRecentItineraries } from "@/hooks/useRecentItineraries";
@@ -20,6 +20,15 @@ interface HamburgerListProps { handleCloseMenu: () => void }
 export default function HamburgerList({ handleCloseMenu }: HamburgerListProps) {
   const { user } = useContext(AuthContext);
   const recent = useRecentItineraries();
+  const [historyMessage, setHistoryMessage] = useState("");
+  function clearHistory() {
+    try {
+      clearRecentItineraries();
+      setHistoryMessage("Recent itineraries cleared. Your saved copy is unchanged.");
+    } catch {
+      setHistoryMessage("Recent itineraries could not be cleared. Browser storage is unavailable. Try again.");
+    }
+  }
   return (
     <Box className={styles.menu} component="nav" aria-label="Trip planner">
       <header className={styles.header}>
@@ -31,7 +40,8 @@ export default function HamburgerList({ handleCloseMenu }: HamburgerListProps) {
       </NextLink>
       <Divider className={styles.divider} />
       <section aria-labelledby="recent-heading">
-        <div className={styles.sectionHeading}><h3 id="recent-heading"><HistoryOutlined /> Recent itineraries</h3>{recent.length > 0 && <button type="button" onClick={clearRecentItineraries}>Clear</button>}</div>
+        <div className={styles.sectionHeading}><h3 id="recent-heading"><HistoryOutlined /> Recent itineraries</h3>{recent.length > 0 && <button type="button" onClick={clearHistory}>Clear</button>}</div>
+        {historyMessage && <p className={styles.empty} role="status">{historyMessage}</p>}
         {recent.length === 0 ? <p className={styles.empty}>Plans you generate on this device will appear here.</p> : recent.map(({ id, createdAt, plan }) => (
           <NextLink key={id} className={styles.recent} href={`/demo/?history=${encodeURIComponent(id)}`} onClick={handleCloseMenu}>
             <b>{plan.city} · {plan.days} {plan.days === 1 ? "day" : "days"}</b>

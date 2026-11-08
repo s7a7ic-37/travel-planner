@@ -35,8 +35,6 @@ export function addRecentItinerary(plan: Plan) {
 }
 
 export function clearRecentItineraries() {
-  try {
-    localStorage.removeItem(HISTORY_KEY);
-    window.dispatchEvent(new Event("plannerhistorychange"));
-  } catch { /* Browser storage may be disabled. */ }
+  localStorage.removeItem(HISTORY_KEY);
+  window.dispatchEvent(new Event("plannerhistorychange"));
 }
