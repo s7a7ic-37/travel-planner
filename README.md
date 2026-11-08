@@ -9,7 +9,7 @@ A city itinerary planner built with Next.js, React, TypeScript and Material UI.
 The guest demo uses curated places across Manchester, London, Edinburgh, Liverpool and York. Choose among museums, outdoors, culture, food and drink, architecture, music and nightlife, or family activities:
 
 - Choose one to seven days and prioritize any of seven interests.
-- Generate two stops per day, mixing your selected interests, and change their order. Other categories fill spare slots when needed.
+- Generate two stops per day, mixing your selected interests, and change their order. Keyboard focus follows a moved stop and its new position is announced. Other categories fill spare slots when needed.
 - Reopen one of the five most recent generated itineraries from the navigation menu.
 - Try another plan to explore different places with the same interests.
 - Replace an individual stop with an unused place in the same city, keeping the other days and stop order.

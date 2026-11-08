@@ -103,6 +103,20 @@ export default function DemoPlanner() {
     }
   }
 
+  function reorderStop(index: number, delta: -1 | 1) {
+    if (!activePlan) return;
+    const requested = ++revision.current;
+    setPlan(current => current && moveStop(current, index, delta));
+    setMessage(`Moved ${activePlan.stops[index].name} to stop ${index + delta + 1} of ${activePlan.stops.length}. Your saved copy is unchanged until you save.`);
+    requestAnimationFrame(() => {
+      if (requested !== revision.current) return;
+      const row = itineraryRef.current?.querySelector(`[data-stop-position="${index + delta}"]`);
+      const button = row?.querySelector<HTMLButtonElement>(`button[data-direction="${delta}"]`);
+      if (button && !button.disabled) button.focus();
+      else row?.querySelector<HTMLElement>("h4")?.focus();
+    });
+  }
+
   function save() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(plan));
@@ -298,12 +312,12 @@ export default function DemoPlanner() {
                       .map((stop, offset) => {
                         const index = day * 2 + offset;
                         return (
-                          <li key={index}>
+                          <li key={index} data-stop-position={index}>
                             <div>
                               <span className={styles.category} data-category={stop.category.toLowerCase().replaceAll(" & ", "-").replaceAll(" ", "-")}>
                                 {stop.category}
                               </span>
-                              <h4>{stop.name}</h4>
+                              <h4 tabIndex={-1}>{stop.name}</h4>
                               <p>{stop.note}</p>
                               <a
                                 href={`https://www.openstreetmap.org/search?query=${encodeURIComponent(stop.name + ", " + activePlan.city)}`}
@@ -331,28 +345,18 @@ export default function DemoPlanner() {
                               <button
                                 type="button"
                                 aria-label={`Move ${stop.name} earlier`}
+                                data-direction="-1"
                                 disabled={index === 0}
-                                onClick={() => {
-                                  revision.current += 1;
-                                  setPlan(
-                                    (current) =>
-                                      current && moveStop(current, index, -1),
-                                  );
-                                }}
+                                onClick={() => reorderStop(index, -1)}
                               >
                                 ↑
                               </button>
                               <button
                                 type="button"
                                 aria-label={`Move ${stop.name} later`}
+                                data-direction="1"
                                 disabled={index === activePlan.stops.length - 1}
-                                onClick={() => {
-                                  revision.current += 1;
-                                  setPlan(
-                                    (current) =>
-                                      current && moveStop(current, index, 1),
-                                  );
-                                }}
+                                onClick={() => reorderStop(index, 1)}
                               >
                                 ↓
                               </button>
