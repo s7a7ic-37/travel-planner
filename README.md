@@ -15,6 +15,7 @@ The guest demo uses curated places across Manchester, London, Edinburgh, Liverpo
 - Replace an individual stop with an unused place in the same city, keeping the other days and stop order.
 - Save and load a plan in your browser, or remove the saved copy.
 - Export/import a JSON itinerary file or print the plan.
+- Choose a start date and download an iCalendar file with one all-day event per day.
 - Open place searches on OpenStreetMap.
 
 Recent plans, saved copies and imported files stay in the browser. JSON is a plain-text transfer format, so an itinerary can be inspected or moved between devices. Imports are limited to 6 KB and validated against the sample places. Importing replaces the open itinerary; saving it locally is a separate action. If you change the planner while a file is being read, your newer changes take priority.

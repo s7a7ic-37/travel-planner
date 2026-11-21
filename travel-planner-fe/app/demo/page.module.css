@@ -34,6 +34,10 @@
 .transfer label { display: block; font-size: 13px; margin: 12px 0; }
 .transfer input { width: 100%; font: 12px "Trebuchet MS",Arial,sans-serif; }
 .transfer input::file-selector-button { min-height: 44px; padding: 8px 10px; border: 1px solid var(--travel-field-line); border-radius: 8px; background: var(--travel-surface); color: var(--travel-ink); cursor: pointer; }
+.calendar { margin: 0 0 12px; }
+.calendarForm { display: flex; flex-wrap: wrap; align-items: end; gap: 8px; padding-bottom: 8px; }
+.calendarForm label { margin: 0 0 4px; }
+.calendarForm input { min-height: 44px; padding: 6px 10px; border: 1px solid var(--travel-field-line); border-radius: 8px; background: var(--travel-field); color: var(--travel-ink); font: inherit; }
 .itinerary { min-width: 0; scroll-margin-top: 24px; }
 .empty { display: flex; flex-direction: column; justify-content: center; padding: 44px; border-radius: 24px; background: var(--travel-soft); min-height: 400px; }
 .emptyMark { display: inline-grid; place-items: center; align-self: start; width: 62px; height: 62px; margin-bottom: 32px; border-radius: 50%; background: var(--travel-accent); color: var(--travel-accent-ink); font-size: 34px; }
@@ -92,7 +96,7 @@
 @media print {
   .demo { margin: 0; background: white; color: black; }
   .demo * { color: black !important; background: transparent !important; }
-  .hero, .controls, .actions, .reorder, .replace, .links, .message { display: none; }
+  .hero, .controls, .actions, .calendar, .reorder, .replace, .links, .message { display: none; }
   .layout { display: block; }
   .day { break-inside: avoid; }
   .day:last-of-type { margin-bottom: 0; }

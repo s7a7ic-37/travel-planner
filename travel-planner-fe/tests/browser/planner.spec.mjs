@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { readFile } from 'node:fs/promises';
 
 const savedKey = 'travel-planner-personal-demo-v1';
 const historyKey = 'travel-planner-recent-v1';
@@ -129,4 +130,47 @@ test('saving or removing a copy in another tab updates controls without changing
   } finally {
     await other.close();
   }
+});
+
+test('calendar download follows the current plan and resets the date for a new one', async ({ page }) => {
+  if (page.viewportSize().width < 600) await page.setViewportSize({ width: 320, height: 900 });
+  const requests = [];
+  page.on('request', request => requests.push(request.method()));
+  const summary = page.getByText('Add to calendar', { exact: true });
+  const date = page.getByLabel('Trip start date');
+  const button = page.getByRole('button', { name: 'Download calendar (.ics)', exact: true });
+  await expect(date).toBeHidden();
+  await summary.focus();
+  await page.keyboard.press('Enter');
+  await expect(date).toBeVisible();
+  await expect(button).toBeDisabled();
+  await date.fill('2026-12-31');
+
+  const stops = page.locator('main li h4');
+  const original = await stops.first().textContent();
+  await page.getByRole('button', { name: 'Move ' + original + ' later', exact: true }).click();
+  await expect(stops.nth(1)).toHaveText(original);
+  await expect(date).toHaveValue('2026-12-31');
+  const stopNames = await stops.allTextContents();
+  const next = page.waitForEvent('download');
+  await button.focus();
+  await page.keyboard.press('Enter');
+  const download = await next;
+  expect(download.suggestedFilename()).toBe('manchester-2026-12-31.ics');
+  const unfolded = (await readFile(await download.path(), 'utf8')).replace(/\r\n[ \t]/g, '');
+  const events = unfolded.match(/BEGIN:VEVENT[\s\S]*?END:VEVENT/g);
+  expect(events).toHaveLength(2);
+  expect(events[0]).toContain('DTSTART;VALUE=DATE:20261231\r\nDTEND;VALUE=DATE:20270101');
+  expect(events[1]).toContain('DTSTART;VALUE=DATE:20270101\r\nDTEND;VALUE=DATE:20270102');
+  expect(events[0]).toContain('DESCRIPTION:' + stopNames.slice(0, 2).join('\\n'));
+  expect(events[1]).toContain('DESCRIPTION:' + stopNames.slice(2, 4).join('\\n'));
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  expect(requests.every(method => ['GET', 'HEAD'].includes(method))).toBe(true);
+
+  await page.emulateMedia({ media: 'print' });
+  await expect(summary).toBeHidden();
+  await page.emulateMedia({ media: 'screen' });
+  await page.getByRole('button', { name: 'Try another plan ↻', exact: true }).click();
+  await expect(date).toHaveValue('');
+  await expect(button).toBeDisabled();
 });

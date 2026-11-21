@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import DownloadOutlined from "@mui/icons-material/DownloadOutlined";
 import BookmarkBorder from "@mui/icons-material/BookmarkBorder";
 import PrintOutlined from "@mui/icons-material/PrintOutlined";
+import { exportCalendar } from "@/lib/calendar";
 import {
   createPlan,
   availablePlaces,
@@ -24,11 +25,23 @@ import styles from "./page.module.css";
 
 const STORAGE_KEY = "travel-planner-personal-demo-v1";
 
+function downloadFile(contents: string, filename: string, type: string) {
+  const url = URL.createObjectURL(new Blob([contents], { type }));
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
 export default function DemoPlanner() {
   const [days, setDays] = useState(2);
   const [city, setCity] = useState<City>("Manchester");
   const [preferences, setPreferences] = useState<Interest[]>([]);
   const [plan, setPlan] = useState<Plan | null>(null);
+  const [calendarDate, setCalendarDate] = useState("");
   const [message, setMessage] = useState("");
   const [saved, setSaved] = useState(false);
   const itineraryRef = useRef<HTMLElement>(null);
@@ -66,6 +79,7 @@ export default function DemoPlanner() {
       // Apply the menu's URL command once, then remove it from the URL below.
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setPlan(null);
+      setCalendarDate("");
       setCity("Manchester");
       setDays(2);
       setPreferences([]);
@@ -79,6 +93,7 @@ export default function DemoPlanner() {
     if (!item) return;
     revision.current += 1;
     setPlan(item.plan);
+    setCalendarDate("");
     setCity(item.plan.city);
     setDays(item.plan.days);
     setPreferences(item.plan.preferences);
@@ -97,6 +112,7 @@ export default function DemoPlanner() {
         variation.current += 1;
       }
       setPlan(next);
+      setCalendarDate("");
       try {
         addRecentItinerary(next);
         setMessage("Itinerary ready. Added to recent itineraries.");
@@ -140,6 +156,7 @@ export default function DemoPlanner() {
     try {
       const loaded = restorePlan(localStorage.getItem(STORAGE_KEY) || "");
       setPlan(loaded);
+      setCalendarDate("");
       setDays(loaded.days);
       setCity(loaded.city);
       setPreferences(loaded.preferences);
@@ -162,14 +179,21 @@ export default function DemoPlanner() {
   }
 
   function download() {
-    if (!plan) return;
-    const url = URL.createObjectURL(new Blob([exportPlan(plan)], { type: "application/json" }));
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `${plan.city.toLowerCase()}-sample-plan.json`;
-    link.click();
-    URL.revokeObjectURL(url);
+    if (!activePlan) return;
+    downloadFile(exportPlan(activePlan), activePlan.city.toLowerCase() + "-sample-plan.json", "application/json");
     setMessage("Downloaded your sample plan. Import it in another browser to continue.");
+  }
+
+  function downloadCalendar(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!activePlan) return;
+    try {
+      const calendar = exportCalendar(activePlan, calendarDate);
+      downloadFile(calendar, activePlan.city.toLowerCase() + "-" + calendarDate + ".ics", "text/calendar;charset=utf-8");
+      setMessage("Downloaded one all-day calendar event per itinerary day.");
+    } catch (error) {
+      setMessage(error instanceof RangeError ? error.message : "The calendar file could not be downloaded.");
+    }
   }
 
   async function importFile(event: React.ChangeEvent<HTMLInputElement>) {
@@ -182,6 +206,7 @@ export default function DemoPlanner() {
       const imported = await importPlanFile(file);
       if (requested !== revision.current) return;
       setPlan(imported);
+      setCalendarDate("");
       setDays(imported.days);
       setCity(imported.city);
       setPreferences(imported.preferences);
@@ -219,6 +244,7 @@ export default function DemoPlanner() {
             revision.current += 1;
             setCity(event.target.value as City);
             setPlan(null);
+            setCalendarDate("");
             variation.current = 0;
             setMessage(`Ready to build a new ${event.target.value} itinerary.`);
           }}>
@@ -307,6 +333,17 @@ export default function DemoPlanner() {
                   </button>
                 </div>
               </div>
+              <details className={`${styles.transfer} ${styles.calendar}`}>
+                <summary>Add to calendar</summary>
+                <form className={styles.calendarForm} onSubmit={downloadCalendar}>
+                  <div>
+                    <label htmlFor="calendar-date">Trip start date</label>
+                    <input id="calendar-date" type="date" required min="0001-01-01" max="9999-12-31"
+                      value={calendarDate} onChange={(event) => setCalendarDate(event.target.value)} />
+                  </div>
+                  <button type="submit" disabled={!calendarDate}>Download calendar (.ics)</button>
+                </form>
+              </details>
               {Array.from({ length: activePlan.days }, (_, day) => (
                 <article className={styles.day} key={day}>
                   <h3>
