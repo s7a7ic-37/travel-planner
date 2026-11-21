@@ -43,15 +43,21 @@ export default function DemoPlanner() {
   const activePlan = plan?.city === city ? plan : null;
 
   useEffect(() => {
-    try {
-      // Browser storage is restored after hydration so the initial markup stays consistent.
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setSaved(Boolean(localStorage.getItem(STORAGE_KEY)));
-    } catch {
-      setMessage(
-        "Browser storage is unavailable. You can still build and print a plan.",
-      );
+    function refreshSaved(event?: StorageEvent) {
+      if (event && event.key !== STORAGE_KEY && event.key !== null) return;
+      try {
+        if (event && event.storageArea !== localStorage) return;
+        setSaved(Boolean(localStorage.getItem(STORAGE_KEY)));
+      } catch {
+        setMessage(
+          "Browser storage is unavailable. You can still build and print a plan.",
+        );
+      }
     }
+    // Browser storage is read after hydration so the initial markup stays consistent.
+    refreshSaved();
+    window.addEventListener("storage", refreshSaved);
+    return () => window.removeEventListener("storage", refreshSaved);
   }, []);
 
   useEffect(() => {

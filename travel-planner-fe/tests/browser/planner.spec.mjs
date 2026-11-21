@@ -3,7 +3,14 @@ import { test, expect } from '@playwright/test';
 const savedKey = 'travel-planner-personal-demo-v1';
 const historyKey = 'travel-planner-recent-v1';
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ context, page, baseURL }) => {
+  const origin = new URL(baseURL).origin;
+  await context.route('**/*', route => {
+    const request = route.request();
+    return new URL(request.url()).origin === origin && ['GET', 'HEAD'].includes(request.method())
+      ? route.continue()
+      : route.abort();
+  });
   await page.goto('/demo/');
   await page.getByRole('button', { name: 'Build itinerary →', exact: true }).click();
   await page.getByRole('button', { name: 'Save locally', exact: true }).click();
@@ -81,4 +88,45 @@ test('failed history removal preserves recent plans and supports retry', async (
   expect(await page.evaluate(key => localStorage.getItem(key), historyKey)).toBeNull();
   expect(await page.evaluate(key => localStorage.getItem(key), savedKey)).toBe(saved);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test('saving or removing a copy in another tab updates controls without changing the current plan', async ({ context, page }) => {
+  await page.getByRole('button', { name: 'Remove saved copy', exact: true }).click();
+  const other = await context.newPage();
+  try {
+    await other.goto('/demo/');
+    const load = other.getByRole('button', { name: 'Load saved plan', exact: true });
+    const destination = other.getByLabel('Destination');
+    const days = other.getByLabel('How many days?');
+    const draftInterest = other.getByRole('checkbox', { name: 'Culture', exact: true });
+    await expect(load).toHaveCount(0);
+    await destination.selectOption('Edinburgh');
+    await days.fill('3');
+    await draftInterest.check();
+    await other.getByRole('button', { name: 'Build itinerary →', exact: true }).click();
+    await expect(other.locator('main li h4')).toHaveCount(6);
+    const originalStops = await other.locator('main li h4').allTextContents();
+
+    await page.getByLabel('Destination').selectOption('York');
+    await page.getByRole('checkbox', { name: 'Outdoors', exact: true }).check();
+    await page.getByRole('button', { name: 'Build itinerary →', exact: true }).click();
+    await page.getByRole('button', { name: 'Save locally', exact: true }).click();
+    await expect(load).toBeVisible();
+    await expect(destination).toHaveValue('Edinburgh');
+    await expect(days).toHaveValue('3');
+    await expect(draftInterest).toBeChecked();
+    await expect(other.locator('main li h4')).toHaveText(originalStops);
+
+    await load.click();
+    await expect(destination).toHaveValue('York');
+    await expect(days).toHaveValue('2');
+    await expect(other.getByRole('checkbox', { name: 'Outdoors', exact: true })).toBeChecked();
+    await expect(other.locator('main li h4')).toHaveCount(4);
+    const loadedStops = await other.locator('main li h4').allTextContents();
+    await page.getByRole('button', { name: 'Remove saved copy', exact: true }).click();
+    await expect(load).toHaveCount(0);
+    await expect(other.locator('main li h4')).toHaveText(loadedStops);
+  } finally {
+    await other.close();
+  }
 });
