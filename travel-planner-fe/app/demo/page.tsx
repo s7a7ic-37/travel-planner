@@ -54,6 +54,9 @@ export default function DemoPlanner() {
   const newPlanRequest = searchParams.get("new");
   const historyRequest = searchParams.get("history");
   const activePlan = plan?.city === city ? plan : null;
+  const matchingStops = activePlan?.preferences.length
+    ? activePlan.stops.filter(stop => activePlan.preferences.includes(stop.category)).length
+    : null;
 
   useEffect(() => {
     function refreshSaved(event?: StorageEvent) {
@@ -322,6 +325,9 @@ export default function DemoPlanner() {
                     {activePlan.city.toUpperCase()} / {activePlan.days} {activePlan.days === 1 ? "DAY" : "DAYS"}
                   </p>
                   <h2>Your itinerary</h2>
+                  {matchingStops !== null && matchingStops < activePlan.stops.length && (
+                    <p className={`${styles.small} ${styles.interestMatch}`}>{matchingStops} of {activePlan.stops.length} stops in your selected categories.</p>
+                  )}
                 </div>
                 <div className={styles.actions}>
                   <button type="button" onClick={save}>

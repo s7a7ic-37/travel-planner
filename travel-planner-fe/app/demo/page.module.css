@@ -96,7 +96,7 @@
 @media print {
   .demo { margin: 0; background: white; color: black; }
   .demo * { color: black !important; background: transparent !important; }
-  .hero, .controls, .actions, .calendar, .reorder, .replace, .links, .message { display: none; }
+  .hero, .controls, .actions, .calendar, .interestMatch, .reorder, .replace, .links, .message { display: none; }
   .layout { display: block; }
   .day { break-inside: avoid; }
   .day:last-of-type { margin-bottom: 0; }

@@ -174,3 +174,39 @@ test('calendar download follows the current plan and resets the date for a new o
   await expect(date).toHaveValue('');
   await expect(button).toBeDisabled();
 });
+
+test('a destination change clears the old itinerary and shows how many stops match a preference', async ({ page }) => {
+  const destination = page.getByLabel('Destination');
+  const days = page.getByLabel('How many days?');
+  const family = page.getByRole('checkbox', { name: 'Family', exact: true });
+  const build = page.getByRole('button', { name: 'Build itinerary →', exact: true });
+  const stops = page.locator('main li h4');
+  const match = page.getByText('1 of 14 stops in your selected categories.', { exact: true });
+  const saved = await page.evaluate(key => localStorage.getItem(key), savedKey);
+
+  await destination.selectOption('Liverpool');
+  await expect(page.getByRole('heading', { name: 'Your itinerary', exact: true })).toHaveCount(0);
+  await days.fill('7');
+  await family.check();
+  await build.click();
+  await expect(stops).toHaveCount(14);
+  await expect(page.locator('main [data-category="family"]')).toHaveCount(1);
+  await expect(match).toBeVisible();
+
+  await destination.selectOption('York');
+  await expect(stops).toHaveCount(0);
+  await expect(match).toHaveCount(0);
+  await expect(family).toBeChecked();
+  await build.click();
+  await expect(stops).toHaveCount(14);
+  await expect(match).toBeVisible();
+
+  await days.fill('1');
+  await family.uncheck();
+  await page.getByRole('checkbox', { name: 'Museums', exact: true }).check();
+  await page.getByRole('button', { name: 'Try another plan ↻', exact: true }).click();
+  await expect(stops).toHaveCount(2);
+  await expect(page.locator('main [data-category="museums"]')).toHaveCount(2);
+  await expect(match).toHaveCount(0);
+  expect(await page.evaluate(key => localStorage.getItem(key), savedKey)).toBe(saved);
+});
