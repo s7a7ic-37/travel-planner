@@ -181,7 +181,7 @@ test('a destination change clears the old itinerary and shows how many stops mat
   const family = page.getByRole('checkbox', { name: 'Family', exact: true });
   const build = page.getByRole('button', { name: 'Build itinerary →', exact: true });
   const stops = page.locator('main li h4');
-  const match = page.getByText('1 of 14 stops in your selected categories.', { exact: true });
+  const match = page.getByText('3 of 14 stops in your selected categories.', { exact: true });
   const saved = await page.evaluate(key => localStorage.getItem(key), savedKey);
 
   await destination.selectOption('Liverpool');
@@ -190,7 +190,7 @@ test('a destination change clears the old itinerary and shows how many stops mat
   await family.check();
   await build.click();
   await expect(stops).toHaveCount(14);
-  await expect(page.locator('main [data-category="family"]')).toHaveCount(1);
+  await expect(page.locator('main [data-category="family"]')).toHaveCount(3);
   await expect(match).toBeVisible();
 
   await destination.selectOption('York');
@@ -199,6 +199,7 @@ test('a destination change clears the old itinerary and shows how many stops mat
   await expect(family).toBeChecked();
   await build.click();
   await expect(stops).toHaveCount(14);
+  await expect(page.locator('main [data-category="family"]')).toHaveCount(3);
   await expect(match).toBeVisible();
 
   await days.fill('1');

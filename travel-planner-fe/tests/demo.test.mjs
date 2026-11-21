@@ -40,13 +40,15 @@ test("plans without preferences offer more than one category", () => {
 
 test("alternative plans reach every city catalogue and remain portable", () => {
   assert.equal(destinations.length, 5);
-  assert.equal(places.length, 34);
+  assert.equal(places.length, 36);
   const allIds = destinations.flatMap(city => cityPlaces[city].map(place => place.id));
   assert.equal(new Set(allIds).size, allIds.length);
   for (const city of destinations) {
     const catalogue = availablePlaces(city);
     assert.ok(catalogue.length >= 12);
     assert.ok(interests.every(interest => catalogue.some(place => place.category === interest)));
+    assert.ok(catalogue.filter(place => place.category === "Family").length >= 3);
+    assert.ok(createPlan(1, ["Family"], 0, city).stops.every(stop => stop.category === "Family"));
     const reached = new Set();
     for (let variation = 0; variation < catalogue.length; variation++) {
       for (const preference of [[], ...interests.map(interest => [interest])]) {

@@ -82,6 +82,8 @@ const manchesterPlaces: Stop[] = [
   { id: "victoria-baths", name: "Victoria Baths", category: "Architecture", note: "See the landmark Edwardian swimming baths and tiled interiors." },
   { id: "band-on-the-wall", name: "Band on the Wall", category: "Music & nightlife", note: "Find live music at the historic Northern Quarter venue." },
   { id: "legoland-discovery", name: "LEGOLAND Discovery Centre", category: "Family", note: "An indoor LEGO attraction at Trafford Palazzo." },
+  { id: "wythenshawe-community-farm", name: "Wythenshawe Community Farm", category: "Family", note: "See the animals at this working city farm. Allow roughly 45–60 minutes." },
+  { id: "z-arts", name: "Z-arts", category: "Family", note: "Look for a children's show or visit the library in Hulme. Allow about an hour." },
 ];
 
 const londonPlaces: Stop[] = [
@@ -101,6 +103,8 @@ const londonPlaces: Stop[] = [
   { id: "london-barbican", name: "Barbican Centre", category: "Architecture", note: "See the arts centre's distinctive post-war architecture." },
   { id: "london-royal-albert-hall", name: "Royal Albert Hall", category: "Music & nightlife", note: "Visit the landmark concert hall and check its live programme." },
   { id: "london-zoo", name: "ZSL London Zoo", category: "Family", note: "Explore the animal habitats in Regent's Park." },
+  { id: "london-young-va", name: "Young V&A", category: "Family", note: "Explore design and play in the Bethnal Green galleries. Allow 1–2 hours." },
+  { id: "london-discover", name: "Discover Children's Story Centre", category: "Family", note: "Make up stories in the play spaces and garden in Stratford. Allow around two hours." },
 ];
 
 const edinburghPlaces: Stop[] = [
@@ -120,6 +124,8 @@ const edinburghPlaces: Stop[] = [
   { id: "edinburgh-parliament", name: "Scottish Parliament Building", category: "Architecture", note: "See the contemporary building at the foot of Arthur's Seat." },
   { id: "edinburgh-usher-hall", name: "Usher Hall", category: "Music & nightlife", note: "Visit the concert hall and check its performance listings." },
   { id: "edinburgh-camera-obscura", name: "Camera Obscura and World of Illusions", category: "Family", note: "Explore interactive optical illusions near the Castle." },
+  { id: "edinburgh-dynamic-earth", name: "Dynamic Earth", category: "Family", note: "Explore the Earth science galleries or see a planetarium show. Allow 2–3 hours for both." },
+  { id: "edinburgh-zoo", name: "Edinburgh Zoo", category: "Family", note: "Walk between the animal habitats and look for keeper talks. Allow about half a day." },
 ];
 
 const liverpoolPlaces: Stop[] = [
@@ -139,6 +145,8 @@ const liverpoolPlaces: Stop[] = [
   { id: "liverpool-st-georges-hall", name: "St George's Hall", category: "Architecture", note: "Explore the neoclassical landmark and its public spaces." },
   { id: "liverpool-cavern-club", name: "The Cavern Club", category: "Music & nightlife", note: "See the Mathew Street live-music venue." },
   { id: "liverpool-eureka", name: "Eureka! Science + Discovery", category: "Family", note: "Explore interactive science exhibits at Seacombe waterfront." },
+  { id: "liverpool-imagine-that", name: "Imagine That!", category: "Family", note: "Try role play, crafts and science activities in Wavertree. Allow around three hours." },
+  { id: "liverpool-storybarn", name: "The Storybarn", category: "Family", note: "Choose a story or craft session in Calderstones Park. Allow about an hour." },
 ];
 
 const yorkPlaces: Stop[] = [
@@ -158,6 +166,8 @@ const yorkPlaces: Stop[] = [
   { id: "york-merchants-hall", name: "Merchant Adventurers' Hall", category: "Architecture", note: "Visit the medieval timber-framed guildhall." },
   { id: "york-crescent", name: "The Crescent", category: "Music & nightlife", note: "Catch live music and events at this independent venue." },
   { id: "york-dig", name: "DIG: An Archaeological Adventure", category: "Family", note: "Explore hands-on archaeology in the city centre." },
+  { id: "york-chocolate-story", name: "York's Chocolate Story", category: "Family", note: "Join a guided tour about York's chocolate makers. Allow a little over an hour." },
+  { id: "york-web-adventure-park", name: "Web Adventure Park", category: "Family", note: "Pick an indoor play area suited to your group. Allow around two hours." },
 ];
 
 export const cityPlaces: Record<City, Stop[]> = {

@@ -44,6 +44,14 @@ The guest planner uses curated examples, with no live search, bookings, map feed
 
 New plans skip known closures. Older saved plans still load with updated closure notes. Catalogue access corrections use [Visit Liverpool](https://www.visitliverpool.com/listing/maritime-museum-temporarily-closed/898701/) and [Royal Botanic Garden Edinburgh](https://www.rbge.org.uk/visit/royal-botanic-garden-edinburgh/); live opening times still need checking.
 
+Family stop descriptions use the official venue pages below. Visit lengths are approximate.
+
+- Manchester offers [Wythenshawe Community Farm](https://www.manchester.gov.uk/parks-leisure-and-the-arts/parks-playgrounds-allotments-and-open-spaces/about-the-park/community-farm) and [Z-arts](https://www.z-arts.org/visit/).
+- London offers [Young V&A](https://www.vam.ac.uk/young) and [Discover Children's Story Centre](https://discover.org.uk/your-visit/faqs/).
+- Edinburgh offers [Dynamic Earth](https://dynamicearth.org.uk/plan-your-visit/tickets-and-pricing/) and [Edinburgh Zoo](https://www.edinburghzoo.org.uk/visit).
+- Liverpool offers [Imagine That!](https://imaginethat.org.uk/childrens-activity-centre-liverpool/) and [The Storybarn](https://www.thereader.org.uk/visit-calderstones/the-storybarn/).
+- York offers [York's Chocolate Story](https://www.yorkschocolatestory.com/plan-your-visit/faqs/about-the-guided-tour/) and [Web Adventure Park](https://www.webadventurepark.co.uk/indoor-play/).
+
 ## Team credit
 
 Originally a four-person Northcoders project. This is Maksymilian Pasiecki's personal fork; the original team history and authorship are preserved. His original contributions included Firebase authentication, itinerary storage/deletion, places API and maps integration.
